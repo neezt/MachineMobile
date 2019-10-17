@@ -98,9 +98,9 @@ ext {
 }
 
 // PLUGIN GRADLE EXTENSIONS START
-apply from: "../cordova-plugin-googlemaps/app-tbxml-android.gradle"
-apply from: "../cordova-plugin-googlemaps/app-apikey.gradle"
-apply from: "../cordova-plugin-fcm-with-dependecy-updated/app-FCMPlugin.gradle"
+apply from: "../cordova-plugin-googlemaps/cliente-tbxml-android.gradle"
+apply from: "../cordova-plugin-googlemaps/cliente-apikey.gradle"
+apply from: "../cordova-plugin-fcm-with-dependecy-updated/cliente-FCMPlugin.gradle"
 // PLUGIN GRADLE EXTENSIONS END
 
 def hasBuildExtras1 = file('build-extras.gradle').exists()

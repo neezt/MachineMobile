@@ -59,11 +59,12 @@
           </div>
         <ion-item>
           <ion-label position="floating">Tipo de Servicio:</ion-label>
-          <ion-input disabled value="{{servicio.tipo}}"></ion-input>
+          
+          <ion-input disabled [(ngModel)]="servicio.tipo"></ion-input>
         </ion-item>
         <ion-item>
           <ion-label position="floating">Fecha de Servicio:</ion-label>
-          <ion-datetime disabled value="{{servicio.dateServicio}}"></ion-datetime>
+          <ion-datetime disabled [(ngModel)]="servicio.dateServicio"></ion-datetime>
         </ion-item>
         <ion-item>
           <ion-label position="floating">Equipo:</ion-label>

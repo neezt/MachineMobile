@@ -202,7 +202,7 @@ async presentAlert() {
                         let markerOptions: MarkerOptions = {
                                       position: new LatLng(data.especialistas[x].position._latitude 
                                                             , data.especialistas[x].position._longitude),
-                                      icon: "assets/icon/logopqno.png"
+                                      icon: "/assets/icon/logopqno.png"
                         };
                         const marker = this.map.addMarker( markerOptions )
                               .then( ( marker: Marker ) => {
