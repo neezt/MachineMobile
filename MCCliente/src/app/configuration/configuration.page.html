@@ -1,0 +1,57 @@
+
+<ion-content>
+   <ion-grid>
+    <ion-row>
+      <ion-col size="1">
+        <a (click)="goToBack()">
+        <ion-icon style="margin-top:10px;" name="arrow-dropleft-circle" size="large" color="primary"></ion-icon>
+        </a>
+      </ion-col>
+      <ion-col >
+        <img src="/assets/icon/logo.png" style="padding-left:10px;">
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+<ion-card>
+  <ion-card-content>
+        <ion-item>
+          <ion-label position="floating">Empresa:</ion-label>
+          <ion-input [(ngModel)]="empresa.empresa"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Nombre:</ion-label>
+          <ion-input [(ngModel)]="empresa.name"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Correo:</ion-label>
+          <ion-input [(ngModel)]="empresa.email"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Correo Alterno:</ion-label>
+          <ion-input [(ngModel)]="empresa.emailAdicional"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Teléfono:</ion-label>
+          <ion-input [(ngModel)]="empresa.telefono"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Celular:</ion-label>
+          <ion-input [(ngModel)]="empresa.celular"></ion-input>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Dirección:</ion-label>
+          <ion-input [(ngModel)]="empresa.direccion"></ion-input>
+        </ion-item>
+        <ion-grid>
+          <ion-row>
+            <ion-col offset="3">
+              <ion-button color="primary" size="small">
+                Solicitar Cambios
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      
+    </ion-card-content>
+  </ion-card>
+</ion-content>

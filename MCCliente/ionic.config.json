@@ -1,0 +1,7 @@
+{
+  "name": "MCCliente",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}
