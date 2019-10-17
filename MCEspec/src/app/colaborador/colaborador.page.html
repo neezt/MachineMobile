@@ -1,0 +1,148 @@
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="1">
+        <ion-icon style="margin-top:10px;" name="arrow-dropleft-circle" size="large" color="primary"></ion-icon>
+      </ion-col>
+      <ion-col >
+        <img src="/assets/icon/logo.png" style="padding-left:10px;">
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-text padding color="primary" 
+      style="font-size:22px; font-weight:bold;">
+    Néstor López
+  </ion-text>
+ <ion-grid padding>
+    <ion-row>
+      <ion-col>
+        Estatus:
+      </ion-col>
+      <ion-col offset="5">
+        <ion-icon name="checkbox" color="success" size="large"></ion-icon>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        Disponibilidad:
+      </ion-col>
+      <ion-col  offset="4">&nbsp;
+        <ion-icon name="close-circle" color="danger" size="large"></ion-icon>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  
+  <ion-text padding 
+      style="font-size:22px; ">
+    Resumen de Servicios
+  </ion-text>
+<ion-grid padding>
+    <ion-row>
+      <ion-col>
+        Aceptados:
+      </ion-col>
+      <ion-col offset="5">
+        10
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        Rechazados:
+      </ion-col>
+      <ion-col  offset="5">
+        2
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        Cancelados:
+      </ion-col>
+      <ion-col  offset="5">
+        4
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-text padding 
+      style="font-size:22px; ">
+    Resumen de Encuestas
+  </ion-text>
+  <ion-item>
+          <ion-label>Puntualidad</ion-label>
+  </ion-item>
+  <ion-item>
+          <rating [(ngModel)]="puntualidad"
+              readonly="false"
+              size="default"
+              (ngModelChange)="onRateChange($event)">
+              </rating>
+   </ion-item>
+   <ion-text padding 
+      style="font-size:19px; ">
+    Calidad de Servicio
+  </ion-text>
+  <ion-item>
+    <ion-label>Dominio Técnico</ion-label>
+  </ion-item>
+  <ion-item>
+          
+          <rating [(ngModel)]="dominio"
+              readonly="false"
+              size="default"
+              (ngModelChange)="onRateChange($event)">
+              </rating>
+   </ion-item>
+   <ion-item>
+          <ion-label>Seguimiento de Proceso</ion-label>
+   </ion-item>          
+   <ion-item>
+          <rating [(ngModel)]="proceso"
+              readonly="false"
+              size="default"
+              (ngModelChange)="onRateChange($event)">
+              </rating>
+   </ion-item>
+   <ion-item>
+          <ion-label>Orden y Limpieza</ion-label>
+   </ion-item>          
+   <ion-item>
+          <rating [(ngModel)]="orden"
+              readonly="false"
+              size="default"
+              (ngModelChange)="onRateChange($event)">
+              </rating>
+   </ion-item>
+   <ion-text padding 
+      style="font-size:19px; ">
+      Atención al Cliente
+  </ion-text>
+  <ion-item>
+          <ion-label>Empatia</ion-label>
+   </ion-item>          
+   <ion-item>
+          <rating [(ngModel)]="empatia"
+              readonly="false"
+              size="default"
+              (ngModelChange)="onRateChange($event)">
+              </rating>
+   </ion-item>
+   <ion-item>
+          <ion-label>Rapidez</ion-label>
+   </ion-item>          
+   <ion-item>
+          <rating [(ngModel)]="rapidez"
+              readonly="false"
+              size="default"
+              (ngModelChange)="onRateChange($event)">
+              </rating>
+   </ion-item>
+   <ion-item>
+          <ion-label>Comunicación</ion-label>
+   </ion-item>          
+   <ion-item>
+          <rating [(ngModel)]="comunicacion"
+              readonly="false"
+              size="default"
+              (ngModelChange)="onRateChange($event)">
+              </rating>
+   </ion-item>
+</ion-content>

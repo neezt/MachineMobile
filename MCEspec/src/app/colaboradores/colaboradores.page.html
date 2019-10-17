@@ -1,0 +1,147 @@
+<ion-content>
+<ion-grid>
+    <ion-row>
+      <ion-col size="1">
+        <ion-icon style="margin-top:10px;" name="arrow-dropleft-circle" size="large" color="primary"></ion-icon>
+      </ion-col>
+      <ion-col >
+        <img src="/assets/icon/logo.png" style="padding-left:10px;">
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+  <div padding>
+    
+    <ion-button 
+        fill="clear" 
+        (click)="alive = !alive" 
+        size="small">
+          <ion-text *ngIf="!alive">
+            Filtros 
+          </ion-text>
+          <ion-text *ngIf="alive">
+            Ocultar
+          </ion-text>
+    </ion-button>
+  </div>
+  <div *ngIf="alive" >
+        <ion-item>
+          <ion-label position="floating">Nombre:</ion-label>
+          <ion-input></ion-input>
+        </ion-item>
+        <ion-item>
+        <ion-label position="floating">Estatus:</ion-label>
+          <ion-select>
+            <ion-select-option value="Activo">Activo</ion-select-option>
+            <ion-select-option value="Inactivo">Inactivo</ion-select-option>
+          </ion-select>
+        </ion-item>
+        <ion-item>
+          <ion-label position="floating">Disponibilidad:</ion-label>
+          <ion-toggle checked></ion-toggle>
+        </ion-item>
+        <ion-grid>
+          <ion-row>
+            <ion-col offset="4">
+              <ion-button color="primary" size="small">
+                <ion-icon name="search"></ion-icon>
+                Buscar
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+  </div>
+
+<ion-card href="/colaborador">
+  <ion-item>
+    <ion-avatar item-start>
+      <img src="/assets/images/avatar.png">
+    </ion-avatar>
+    <h2>Néstor Lopez</h2>
+  </ion-item>
+  <ion-card-content>
+    <ion-row>
+      <ion-col>
+        Estatus: Activo
+      </ion-col>
+      <ion-col>
+        Tipo: Especialista
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        Disponibilidad: Libre
+      </ion-col>
+    </ion-row>
+  </ion-card-content>
+</ion-card>
+<ion-card>
+  <ion-item>
+    <ion-avatar item-start>
+      <img src="/assets/images/avatar.png">
+    </ion-avatar>
+    <h2>Matias Marín</h2>
+  </ion-item>
+  <ion-card-content>
+    <ion-row>
+      <ion-col>
+        Estatus: Activo
+      </ion-col>
+      <ion-col>
+        Tipo: Supervisor
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        Disponibilidad: Libre
+      </ion-col>
+    </ion-row>
+  </ion-card-content>
+</ion-card>
+<ion-card>
+  <ion-item>
+    <ion-avatar item-start>
+      <img src="/assets/images/avatar.png">
+    </ion-avatar>
+    <h2>Lydia Gonzalez</h2>
+  </ion-item>
+  <ion-card-content>
+    <ion-row>
+      <ion-col>
+        Estatus: Inactivo
+      </ion-col>
+      <ion-col>
+        Tipo: Especialista
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        Disponibilidad: Libre
+      </ion-col>
+    </ion-row>
+  </ion-card-content>
+</ion-card>
+<ion-card>
+  <ion-item>
+    <ion-avatar item-start>
+      <img src="/assets/images/avatar.png">
+    </ion-avatar>
+    <h2>Néstor Lopez</h2>
+  </ion-item>
+  <ion-card-content>
+    <ion-row>
+      <ion-col>
+        Estatus: Activo
+      </ion-col>
+      <ion-col>
+        Tipo: Especialista
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        Disponibilidad: Libre
+      </ion-col>
+    </ion-row>
+  </ion-card-content>
+</ion-card>
+</ion-content>
