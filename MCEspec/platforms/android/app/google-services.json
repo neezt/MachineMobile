@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "1028569830496",
+    "firebase_url": "https://machinecare-17c7a.firebaseio.com",
+    "project_id": "machinecare-17c7a",
+    "storage_bucket": "machinecare-17c7a.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1028569830496:android:e7d11f9cf3a1250a",
+        "android_client_info": {
+          "package_name": "com.machinecare.app"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1028569830496-p82d7n9ukoq8qvn6237e8r5ar5gdveo5.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBEXeG4kxa0f_slIB0EpqYmdRasJsNsijw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1028569830496-p82d7n9ukoq8qvn6237e8r5ar5gdveo5.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

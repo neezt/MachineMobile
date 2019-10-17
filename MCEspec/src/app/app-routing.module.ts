@@ -21,6 +21,7 @@ const routes: Routes = [
   { path: 'reporte-progreso', loadChildren: './reporte-progreso/reporte-progreso.module#ReporteProgresoPageModule' },
   { path: 'servicio', loadChildren: './servicio/servicio.module#ServicioPageModule' },
   { path: 'solicitud-aceptada', loadChildren: './solicitud-aceptada/solicitud-aceptada.module#SolicitudAceptadaPageModule' },
+  { path: 'servicios', loadChildren: './servicios/servicios.module#ServiciosPageModule' },
 ];
 
 @NgModule({
