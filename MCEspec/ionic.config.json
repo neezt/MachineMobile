@@ -1,0 +1,7 @@
+{
+  "name": "MCEspec",
+  "integrations": {
+    "cordova": {}
+  },
+  "type": "angular"
+}

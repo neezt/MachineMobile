@@ -1,0 +1,32 @@
+
+<ion-content>
+  <ion-progress-bar
+    [hidden]=loading
+    type="indeterminate" 
+    reversed="true"></ion-progress-bar>
+    <ion-card class="welcome-card" 
+          color="light" style="margin-top:310px;">
+      <ion-card-content >
+        <span style="color:red;">{{mensajeError}}</span>
+        <ion-item>
+          <ion-label position="floating">Email:</ion-label>
+          <ion-input [(ngModel)]="login.email"></ion-input>
+        </ion-item>
+        <ion-item>
+        <ion-label position="floating">Password:</ion-label>
+        <ion-input [(ngModel)]="login.password" type="password"></ion-input>
+      </ion-item>
+      <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-button color="primary" [disabled]=!loading
+              type="button" expand="block" (click)="createLogin()">
+                Entrar
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+      
+      </ion-card-content>
+    </ion-card>
+</ion-content>
