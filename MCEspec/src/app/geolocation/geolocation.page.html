@@ -1,0 +1,33 @@
+<ion-content>
+  
+  <ion-fab>
+    <ion-fab-button color="success" size="small" href="/configuration">
+      <ion-icon ios="ios-settings" md="md-settings"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  <ion-fab 
+      horizontal="center"
+      style="margin-left: 55px !important;">
+    <ion-fab-button color="medium" size="small" href="/calendar">
+        <ion-icon ios="ios-calendar" md="md-calendar"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  <ion-fab horizontal="end">
+    <ion-fab-button color="secondary" size="small">
+          <ion-icon ios="ios-list-box" md="md-list-box"></ion-icon>
+    </ion-fab-button>
+  </ion-fab>
+  
+
+  <ion-fab 
+      vertical="top"
+      horizontal="center"
+      style="margin-top:40px !important;" >
+    <ion-fab-button class="fabMap" (click)="presentAlertPrompt()" color="light">
+      <img src="/assets/images/logo_sh.png">
+    </ion-fab-button>
+    
+  </ion-fab>
+
+  <div #mapElement class="map"></div>
+</ion-content>
