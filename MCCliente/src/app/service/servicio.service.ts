@@ -15,13 +15,23 @@ export class ServicioService {
 
   constructor(
     private authService: AuthenticateService,
-    db:AngularFirestore
+    private db:AngularFirestore
   ) { 
-     this.authService.getUser()
-                  .then(data =>{
-                        this.userDetail = data;
-                        this.serviciosCollection = db.collection<ServicioI>('servicios',
-                        ref => ref.where('clienteId', '==', this.userDetail.uid));
+      this.serviciosCollection = db.collection<ServicioI>('servicios');
+          this.servicios = this.serviciosCollection.snapshotChanges().pipe(
+            map(actions => {
+              return actions.map(a => {
+                const data = a.payload.doc.data();
+                const id = a.payload.doc.id;
+                return {id, ...data};
+              });
+            })
+          );
+  }
+
+  getServicios(user){
+    this.serviciosCollection = this.db.collection<ServicioI>('servicios',
+                        ref => ref.where('clienteId', '==', user));
                         this.servicios = this.serviciosCollection.snapshotChanges().pipe(
                           map(actions => {
                             return actions.map(a => {
@@ -31,11 +41,6 @@ export class ServicioService {
                             });
                           })
                         );
-                    });
-    
-  }
-
-  getServicios(){
     return this.servicios;
   }
 

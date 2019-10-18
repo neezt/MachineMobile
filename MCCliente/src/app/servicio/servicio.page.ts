@@ -1,7 +1,10 @@
 import { Component, OnInit,OnDestroy } from '@angular/core';
 import { Router,ActivatedRoute  } from '@angular/router';
-import { AuthenticationService } from '../api/authentication.service';
 import { Platform,AlertController } from '@ionic/angular';
+import { ServicioI } from '../models/servicios.interface';
+import { ServicioService } from '../service/servicio.service';
+import { EspecialistaService } from '../service/especialista.service';
+import { AuthenticateService } from '../service/authentication.service';
 
 @Component({
   selector: 'app-servicio',
@@ -10,16 +13,31 @@ import { Platform,AlertController } from '@ionic/angular';
 })
 export class ServicioPage implements OnInit,OnDestroy {
   backButtonSubscription; 
-  servicio ={"servicio":1,
-             "id":"",
-             "status":""};
+  servicio: ServicioI ={
+                clienteId: '',
+                especialista: null,
+                createdAt: null,
+                descripcion: '',
+                fechaServicio: null,
+                equipo: "",
+                frecuenciaFalla:"",
+                plataforma : "",
+                seccionFalla : "",
+                servicio : 0,
+                status : "",
+                tipo : "",
+                direccion : "",
+                position: null
+            }
   showCancel = true;
 
   constructor(
-    public authService: AuthenticationService,
+    private servicioService: ServicioService,
+    private especialistaService: EspecialistaService,
     private thisRoute:ActivatedRoute,
     private router: Router,
-    public alertController: AlertController
+    public alertController: AlertController,
+    private authService: AuthenticateService
   ) { 
     this.thisRoute.queryParams.subscribe(params => {
         this.getServicio(params.servicio);
@@ -33,14 +51,12 @@ export class ServicioPage implements OnInit,OnDestroy {
 
   async getServicio(id){
     console.log(id);
-     await this.authService.getUrlClientPost("/servicio",{"servicio":id})
-                    .then(data =>{
-                      this.servicio = data[0];
-                      if(this.servicio.status !== 'Cancelado'){
-                        this.showCancel=false;
-                      }
-                      console.log(this.servicio); 
-                    });
+    let servActivo = this.servicioService.getServicio(id)
+                        .subscribe(servs => {
+                              this.servicio = servs;
+                              console.log(this.servicio);
+                              servActivo.unsubscribe();
+                        });
   }
 
   goToBack(){
@@ -68,10 +84,10 @@ export class ServicioPage implements OnInit,OnDestroy {
           handler: () => {
             console.log(this.servicio.id);
             let serv ={"servicio" : this.servicio.id, "status" : "Cancelado"};
-            this.authService.getUrlClientPost("/servicio/update",serv)
+            /*this.authService.getUrlClientPost("/servicio/update",serv)
                     .then(data =>{
                       console.log('Confirm Ok');
-                    });
+                    });*/
           }
         }
       ]

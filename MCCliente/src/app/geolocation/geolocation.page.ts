@@ -36,8 +36,7 @@ export class GeolocationPage implements OnInit,AfterViewInit {
   longitude: any;
   servicios = ['12121','12234','00121','010121','121212','12121','12234','20121','514131','124232'];
   ishidden = false;
-  backButtonSubscription; 
-
+  
   geoLatitude: number;
   geoLongitude: number;
   geoAccuracy:number;
@@ -57,21 +56,22 @@ export class GeolocationPage implements OnInit,AfterViewInit {
   userDetail :any;
 
   servicio: ServicioI ={
-    clienteId: '',
-    especialistaId: '',
-    createdAt: null,
-    descripcion: '',
-    fechaServicio: null,
-    equipo: "",
-    frecuenciaFalla:"",
-    plataforma : "",
-    seccionFalla : "",
-    servicio : 0,
-    status : "",
-    tipo : "",
-    direccion : "",
-    position: null
-}
+                clienteId: '',
+                especialista: null,
+                createdAt: null,
+                descripcion: '',
+                fechaServicio: null,
+                equipo: "",
+                frecuenciaFalla:"",
+                plataforma : "",
+                seccionFalla : "",
+                servicio : 0,
+                status : "Nuevo",
+                tipo : "",
+                direccion : "",
+                position: null
+            }
+  gmarkers = [];
 
   @ViewChild('mapElement', {static: true}) mapNativeElement: ElementRef;
   constructor(
@@ -114,7 +114,7 @@ export class GeolocationPage implements OnInit,AfterViewInit {
           console.log('Received in foreground');
         }
         if(data.landing_page === 'especialista-sitio'){
-          this.router.navigateByUrl("/"+data.landing_page+'?servicio='+data.servicio+'&lat='+data.lat+'&lng='+data.lng+'&especialista='+data.especialista);
+          this.router.navigateByUrl("/"+data.landing_page+'?servicio='+data.servicio+'&especialista='+data.especialista);
         }
         if(data.landing_page === 'servicio-rechazado'){
           this.router.navigateByUrl("/"+data.landing_page+'?servicio='+data.servicio + '&status='+data.status);
@@ -128,7 +128,6 @@ export class GeolocationPage implements OnInit,AfterViewInit {
 
   ngAfterViewInit(): void {
     this.platform.ready().then( () => {
-
 			this.loadMap();
 		});
   }
@@ -143,7 +142,6 @@ async presentAlert() {
     this.servicio.createdAt= new Date();
     this.servicio.fechaServicio = new Date(new Date().getTime() + 1000 * 60 * 60 * 2);
     this.servicio.status="Nuevo";
-    console.log("click servicio");
     
     let confSubs = await this.configurationService.getConfiguration().subscribe(configuration => {
               configuration.tickets =configuration.tickets +1;
@@ -248,26 +246,42 @@ async presentAlert() {
         console.log("entro aqui");
         let espc = this.especialistaService.getEspecialistas().subscribe(especialistas => {
                                               console.log(especialistas);
+                                              //this.removeMarkers();
                                               for(var x=0;x < especialistas.length; x++){
                                                   console.log(especialistas[x].position.latitude);
-                                                  let markerOptions: MarkerOptions = {
+                                                  if(this.gmarkers[x]){
+                                                          console.log("marker update:");
+                                                          console.log(this.gmarkers[x]);
+                                                          this.gmarkers[x].setPosition(new LatLng(especialistas[x].position.latitude 
+                                                                                      , especialistas[x].position.longitude));
+                                                        
+                                                  } else{
+                                                      let markerOptions: MarkerOptions = {
                                                                 position: new LatLng(especialistas[x].position.latitude 
                                                                                       , especialistas[x].position.longitude),
                                                                 icon: {url:"assets/icon/logopqno.png"}
-                                                  };
-                                                  const marker = this.map.addMarker( markerOptions )
+                                                      };
+                                                      const marker = this.map.addMarker( markerOptions )
                                                         .then( ( marker: Marker ) => {
-                                                          
+                                                          this.gmarkers.push(marker);        
                                                         });
+                                                  }
+
                                                 }
                                             });
-        
-        /*this.authService.getUrlClientPost("/especialista/getAll",{})
-                    .then(data =>{
-                      
-                    });*/
-      
     }
+
+    removeMarkers() {
+          for(var x=0;x < this.gmarkers.length; x++){
+            console.log("marker update:");
+            console.log(this.gmarkers[x]);
+            this.gmarkers[x]._map = null;
+              //this.gmarkers[x].setMap(null);
+              this.gmarkers[x] = null;
+          }
+        this.gmarkers = [];
+      }
+
     //Return Comma saperated address
     generateAddress(addressObj){
         let obj = [];

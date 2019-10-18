@@ -2,7 +2,6 @@ import {AfterViewInit, Component, ElementRef, OnInit, ViewChild} from '@angular/
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder,NativeGeocoderOptions } from '@ionic-native/native-geocoder/ngx';
 import { Platform,AlertController } from '@ionic/angular';
-import { AuthenticationService } from '../api/authentication.service';
 import {
   GoogleMaps,
   GoogleMap,
@@ -12,6 +11,11 @@ import {
   Marker
 } from "@ionic-native/google-maps";
 import { Router,ActivatedRoute  } from '@angular/router';
+import { EspecialistaI } from '../models/especialista.interface';
+import { EspecialistaService } from '../service/especialista.service';
+import { AuthenticateService } from '../service/authentication.service';
+import { ServicioI } from '../models/servicios.interface';
+import { ServicioService } from '../service/servicio.service';
 
 declare var google;
 
@@ -26,7 +30,7 @@ export class EspecialistaSitioPage implements OnInit, AfterViewInit {
   geoAccuracy:number;
   geoAddress: string;
 
-  servicio: string;
+  servicio: number;
 
   watchLocationUpdates:any; 
   loading:any;
@@ -42,13 +46,15 @@ export class EspecialistaSitioPage implements OnInit, AfterViewInit {
 
   @ViewChild('mapElement', {static: true}) mapNativeElement: ElementRef;
   constructor(
-    public authService: AuthenticationService,
+    private authService: AuthenticateService,
     public alertController: AlertController,
     private geolocation: Geolocation,
     private platform: Platform,
     private nativeGeocoder: NativeGeocoder,
     private thisRoute:ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private especialistaService: EspecialistaService,
+    private servicioService: ServicioService
     ) { 
       this.thisRoute.queryParams.subscribe(params => {
         console.log("especialista-sitio");
@@ -84,56 +90,61 @@ async presentAlert() {
 
   getServicio(obj) {
     console.log("entro aqui " + obj.servicio);
-      this.servicio = obj.servicio;
-      this.map.one( GoogleMapsEvent.MAP_READY ).then( ( data: any ) => {
-        this.geolocation.getCurrentPosition().then((resp) => {
-        this.geoLatitude = resp.coords.latitude;
-        this.geoLongitude = resp.coords.longitude; 
-        this.geoAccuracy = resp.coords.accuracy; 
+      
+      let observatorServ = this.servicioService.getServicio(obj.servicio)
+                            .subscribe(servicio => {
+                          this.servicio = servicio.servicio; 
+                          this.map.one( GoogleMapsEvent.MAP_READY ).then( ( data: any ) => {
+                            this.geolocation.getCurrentPosition().then((resp) => {
+                            this.geoAccuracy = resp.coords.accuracy; 
 
-        let coordinates: LatLng = new LatLng(obj.lat,obj.lng);
+                            let coordinates: LatLng = new LatLng(servicio.position.latitude,
+                                                                  servicio.position.longitude);
 
-            let position = {
-              target: coordinates,
-              zoom: 14
-            };
+                                let position = {
+                                  target: coordinates,
+                                  zoom: 14
+                                };
 
-            this.map.animateCamera( position );
+                                this.map.animateCamera( position );
 
-            let markerOptions: MarkerOptions = {
-              position: coordinates,
-              title: '#'+obj.servicio
-            };
-            
-            const marker = this.map.addMarker( markerOptions )
-            .then( ( marker: Marker ) => {
-              marker.showInfoWindow();
-            });
-            this.getEspecialista(obj.especialista);
-       }).catch((error) => {
-         alert('Error getting location'+ JSON.stringify(error));
-       });
-      })
+                                let markerOptions: MarkerOptions = {
+                                  position: coordinates,
+                                  title: '#'+servicio.servicio
+                                };
+                                
+                                const marker = this.map.addMarker( markerOptions )
+                                .then( ( marker: Marker ) => {
+                                  marker.showInfoWindow();
+                                });
+                                this.getEspecialista(obj.especialista);
+                          }).catch((error) => {
+                            alert('Error getting location'+ JSON.stringify(error));
+                          });
+                          });
+                          observatorServ.unsubscribe();
+                });
     }
 
 
     async getEspecialista(id){
     console.log(id);
-     await this.authService.getUrlClientPost("/especialista/byId",{"especialista":id})
-                    .then(data =>{
-                      console.log("entro al funcion");
-                      console.log(data);
-                      let markerOptions: MarkerOptions = {
-                        position: new LatLng(data.especialistas[0].position._latitude,data.especialistas[0].position._longitude),
-                        title: data.especialistas[0].name,
-                        icon: "assets/icon/logopqno.png"
-                      };
-                      
-                      const marker = this.map.addMarker( markerOptions )
-                      .then( ( marker: Marker ) => {
-                        marker.showInfoWindow();
-                      });
-                    });
+    this.especialistaService.getEspecialista(id)
+                            .subscribe(especialistas => {
+                              console.log("especialista");
+                              console.log(especialistas.position.latitude);
+                              
+                                  let markerOptions: MarkerOptions = {
+                                                position: new LatLng(especialistas.position.latitude 
+                                                                      , especialistas.position.longitude), 
+                                                icon: { url: 'assets/icon/logopqno.png' }
+                                  };
+                                  const marker = this.map.addMarker( markerOptions )
+                                        .then( ( marker: Marker ) => {
+                                          
+                                        });
+                            });
+
     }
 
 }

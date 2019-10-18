@@ -1,7 +1,7 @@
 export interface ServicioI {
     id?:string;
     clienteId: string;
-    especialistaId: string;
+    especialista: any;
     createdAt: any;
     descripcion: string;
     fechaServicio: any;
