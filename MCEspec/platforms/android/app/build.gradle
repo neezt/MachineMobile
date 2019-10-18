@@ -98,6 +98,9 @@ ext {
 }
 
 // PLUGIN GRADLE EXTENSIONS START
+apply from: "../cordova-plugin-googlemaps/app-tbxml-android.gradle"
+apply from: "../cordova-plugin-googlemaps/app-apikey.gradle"
+apply from: "../cordova-plugin-fcm-with-dependecy-updated/app-FCMPlugin.gradle"
 // PLUGIN GRADLE EXTENSIONS END
 
 def hasBuildExtras1 = file('build-extras.gradle').exists()
@@ -294,6 +297,12 @@ dependencies {
     // SUB-PROJECT DEPENDENCIES START
     implementation(project(path: ":CordovaLib"))
     implementation "com.android.support:support-annotations:27.+"
+    implementation "com.google.android.gms:play-services-maps:15.0.1"
+    implementation "com.google.android.gms:play-services-location:15.0.1"
+    implementation "com.android.support:support-core-utils:27.+"
+    implementation "com.google.firebase:firebase-core:16.0.9"
+    implementation "com.google.firebase:firebase-messaging:18.0.0"
+    implementation "com.squareup.okhttp3:okhttp-urlconnection:3.10.0"
     // SUB-PROJECT DEPENDENCIES END
 }
 

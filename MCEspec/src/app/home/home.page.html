@@ -1,14 +1,57 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>
-      Ionic Blank
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
 
 <ion-content>
-  <div class="ion-padding">
-    The world is your oyster.
-    <p>If you get lost, the <a target="_blank" rel="noopener" href="https://ionicframework.com/docs/">docs</a> will be your guide.</p>
-  </div>
+  <ion-progress-bar
+    [hidden]=loading
+    type="indeterminate" 
+    reversed="true"></ion-progress-bar>
+    <ion-card class="welcome-card" 
+          color="light" style="margin-top:310px;">
+      <ion-card-content >
+        <form class="form" [formGroup]="validations_form"  (ngSubmit)="loginUser(validations_form.value)">
+          <label class="error-message">{{errorMessage}}</label>
+    <ion-item>
+      <ion-label  position="floating" >E-mail</ion-label>
+      <ion-input type="text" formControlName="email"></ion-input>
+    </ion-item>
+    <div class="validation-errors">
+      <ng-container *ngFor="let validation of validation_messages.email">
+        <div class="error-message" *ngIf="validations_form.get('email').hasError(validation.type) && (validations_form.get('email').dirty || validations_form.get('email').touched)">
+          {{ validation.message }}
+        </div>
+      </ng-container>
+    </div>
+ 
+    <ion-item>
+      <ion-label  position="floating">Contraseña</ion-label>
+      <ion-input type="password" formControlName="password" class="form-controll" required></ion-input>
+    </ion-item>
+    <div class="validation-errors">
+      <ng-container *ngFor="let validation of validation_messages.password">
+        <div class="error-message" *ngIf="validations_form.get('password').hasError(validation.type) && (validations_form.get('password').dirty || validations_form.get('password').touched)">
+          {{ validation.message }}
+        </div>
+      </ng-container>
+    </div>
+
+    <ion-grid>
+        <ion-row>
+          <ion-col>
+            <ion-button color="success" 
+              [disabled]=!loading
+              type="button" expand="block" href="/geolocation">
+                Invitado
+              </ion-button>
+          </ion-col>
+          <ion-col>
+            <ion-button  class="submit-btn" type="submit" expand="block" [disabled]="!validations_form.valid">Entrar</ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    
+ 
+    
+  </form>
+      
+      </ion-card-content>
+    </ion-card>
 </ion-content>
