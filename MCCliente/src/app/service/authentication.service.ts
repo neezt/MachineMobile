@@ -1,10 +1,15 @@
 import { Injectable } from "@angular/core";
 import * as firebase from 'firebase/app';
- 
+import { NativeStorage } from '@ionic-native/native-storage/ngx';
+
 @Injectable()
 export class AuthenticateService {
- 
-  constructor(){}
+  
+  user  ={};
+
+  constructor(
+    private nativeStorage: NativeStorage
+  ){}
  
   registerUser(value){
    return new Promise<any>((resolve, reject) => {
@@ -19,7 +24,23 @@ export class AuthenticateService {
    return new Promise<any>((resolve, reject) => {
      firebase.auth().signInWithEmailAndPassword(value.email, value.password)
      .then(
-       res => resolve(res),
+       res => {
+         resolve(res)
+         console.log("idToken:");
+         firebase.auth().currentUser.getIdToken().then(data=>{
+            console.log(data);
+            this.nativeStorage.setItem('userDetails', {
+                  "uid":firebase.auth().currentUser.uid,
+                  "email" : firebase.auth().currentUser.email,
+                  "token" : data
+              })
+                .then(
+                  (data) => console.log('Stored first item!',data),
+                  error => console.error('Error storing item', error)
+                );
+         });
+               
+         },
        err => reject(err))
    })
   }
@@ -40,5 +61,14 @@ export class AuthenticateService {
  
   userDetails(){
     return firebase.auth().currentUser;
+  }
+
+  async getUser(){
+    await this.nativeStorage.getItem('userDetails')
+          .then((data)=>{
+            this.user = data;
+           
+          });
+    return this.user;
   }
 }

@@ -13,10 +13,16 @@ import { FCM } from '@ionic-native/fcm/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder,NativeGeocoderOptions } from '@ionic-native/native-geocoder/ngx';
 import { AuthenticateService } from '../service/authentication.service';
+import { ApiService } from '../api/api.service';
 import { ClienteI } from '../models/clientes.interface';
 import { ClienteService } from '../service/cliente.service';
 import { EspecialistaI } from '../models/especialista.interface';
 import { EspecialistaService } from '../service/especialista.service';
+import { ServicioI } from '../models/servicios.interface';
+import { ServicioService } from '../service/servicio.service';
+import { ConfigurationI } from '../models/configuration.interface';
+import { ConfigurationService } from '../service/configuration.service';
+import * as firebase from 'firebase';
 
 declare var google;
 
@@ -48,7 +54,24 @@ export class GeolocationPage implements OnInit,AfterViewInit {
   };
 
   map = GoogleMaps.create( 'mapElement' );
-  userEmail: string;
+  userDetail :any;
+
+  servicio: ServicioI ={
+    clienteId: '',
+    especialistaId: '',
+    createdAt: null,
+    descripcion: '',
+    fechaServicio: null,
+    equipo: "",
+    frecuenciaFalla:"",
+    plataforma : "",
+    seccionFalla : "",
+    servicio : 0,
+    status : "",
+    tipo : "",
+    direccion : "",
+    position: null
+}
 
   @ViewChild('mapElement', {static: true}) mapNativeElement: ElementRef;
   constructor(
@@ -60,21 +83,27 @@ export class GeolocationPage implements OnInit,AfterViewInit {
     private geolocation: Geolocation,
     private nativeGeocoder: NativeGeocoder,
     private clienteService: ClienteService,
-    private especialistaService: EspecialistaService
+    private especialistaService: EspecialistaService,
+    private servicioService: ServicioService,
+    private configurationService: ConfigurationService,
+    private apiService:ApiService
     ) { 
       this.fcm.getToken().then(token => {
         console.log(token);
         if(this.authService.userDetails()){
           console.log("enviar email:");
-          console.log(this.authService.userDetails().email);
-            this.userEmail = this.authService.userDetails().email;
+          console.log(this.authService.getUser());
+          this.authService.getUser()
+                  .then(data =>{
+                    this.userDetail = data;
+                    console.log(this.userDetail);
+                      let clientSubs =this.clienteService.getCliente(this.userDetail.email).subscribe(cliente => {
+                          cliente.fcm = token;
+                          this.clienteService.updateCliente(cliente,this.userDetail.email);
+                          clientSubs.unsubscribe();
+                    });
+          });
           }
-
-        this.clienteService.getCliente(this.userEmail).subscribe(cliente => {
-              cliente.fcm = token;
-              this.clienteService.updateCliente(cliente,this.userEmail);
-            });
-
         
       });
       this.fcm.onNotification().subscribe(data => {
@@ -105,11 +134,31 @@ export class GeolocationPage implements OnInit,AfterViewInit {
   }
 
 async presentAlert() {
+  await this.authService.getUser()
+                  .then(data =>{
+                    this.userDetail = data;
+          });
+
+    this.servicio.clienteId= this.userDetail.uid;
+    this.servicio.createdAt= new Date();
+    this.servicio.fechaServicio = new Date(new Date().getTime() + 1000 * 60 * 60 * 2);
+    this.servicio.status="Nuevo";
+    console.log("click servicio");
     
-     /*this.authService.getUrlClientPost("/servicio/add",{"servicio" : serv})
-                    .then(data =>{
-                      
-                    });*/
+    let confSubs = await this.configurationService.getConfiguration().subscribe(configuration => {
+              configuration.tickets =configuration.tickets +1;
+              this.servicio.servicio = configuration.tickets;
+              this.configurationService.updateConfiguration(configuration, 'clientes');
+              this.servicioService.addServicio(this.servicio)
+                                .then(data =>{
+                                    this.apiService.getUrlClientPost("/servicio/add",{"servicio" : data.path})
+                                        .then(data =>{
+                                          
+                                        });
+                                });
+                confSubs.unsubscribe(); 
+            });
+    
     const alert = await this.alertController.create({
       header: 'Solicitud enviada',
       message: 'Su solicitud ha sido creada, gracias',
@@ -117,6 +166,7 @@ async presentAlert() {
     });
 
     await alert.present();
+     
   }
 
   async presentAlertPrompt() {

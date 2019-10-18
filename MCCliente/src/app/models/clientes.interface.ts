@@ -6,7 +6,7 @@ export interface ClienteI {
     empresa: string;
     fcm: string;
     handle: string;
-    status: true;
+    status: boolean;
     telefono:string;
     celular : string;
 
