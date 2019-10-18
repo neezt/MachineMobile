@@ -10,10 +10,15 @@ import { CallNumber } from '@ionic-native/call-number/ngx';
   templateUrl: './servicio-rechazado.page.html',
   styleUrls: ['./servicio-rechazado.page.scss'],
 })
-export class ServicioRechazadoPage implements OnInit {
+export class ServicioRechazadoPage implements OnInit,OnDestroy {
   rechazado = true;
-  servicio ={};
+  servicio ={
+    "servicio":"",
+    "status" :""
+  };
+  especialistas = [];
   backButtonSubscription; 
+
   constructor(
     public authService: AuthenticationService,
     private thisRoute:ActivatedRoute,
@@ -28,6 +33,8 @@ export class ServicioRechazadoPage implements OnInit {
         if(params.status === "Aceptado"){
           this.rechazado = false;
           this.getServicio(this.servicio.servicio);
+        } else {
+            this.getSupervisores();
         }
         
     });
@@ -51,14 +58,11 @@ export class ServicioRechazadoPage implements OnInit {
                     });
   }
 
-  async getSupervisores(){
+  async getSupervisores() {
      await this.authService.getUrlClientPost("/especialista/getAll",{"type":"Supervisor"})
                     .then(data =>{
-                      console.log(data);
-                      this.servicio = data.servicios[0];
-                      if(this.servicio.status !== 'Cancelado'){
-                        this.rechazado=false;
-                      }
+                      this.especialistas = data.especialistas;
+                      
                       this.cd.detectChanges();
                       console.log(this.servicio); 
                     });
@@ -73,7 +77,7 @@ export class ServicioRechazadoPage implements OnInit {
   }
 
   goToCall(number){    
-    this.callNumber.callNumber("18001010101", true)
+    this.callNumber.callNumber(number, true)
       .then(res => console.log('Launched dialer!', res))
       .catch(err => console.log('Error launching dialer', err));
   }

@@ -1,4 +1,4 @@
-<ion-content>
+<ion-header translucent>
   <ion-grid>
     <ion-row>
       <ion-col size="1">
@@ -78,11 +78,13 @@
       <ion-select-option value="Ticket">Ticket</ion-select-option>
     </ion-select>
   </ion-item>
+</ion-header>
+<ion-content>
+  <div class="fixed">
   <ion-card
     *ngFor="let servicio of servicios"
-    href="/servicio?servicio={{servicio.servicio}}"
   >
-    <ion-item>
+    <ion-item href="/servicio?servicio={{ servicio.servicio }}">
       <h2>Servicio #{{ servicio.servicio }}</h2>
     </ion-item>
     <ion-card-content>
@@ -100,4 +102,5 @@
       </ion-row>
     </ion-card-content>
   </ion-card>
+  </div>
 </ion-content>

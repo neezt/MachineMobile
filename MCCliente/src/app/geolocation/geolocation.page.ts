@@ -8,11 +8,15 @@ import {
   Marker
 } from "@ionic-native/google-maps";
 import { Platform,AlertController } from '@ionic/angular';
-import { AuthenticationService } from '../api/authentication.service';
 import { Router } from '@angular/router';
 import { FCM } from '@ionic-native/fcm/ngx';
 import { Geolocation } from '@ionic-native/geolocation/ngx';
 import { NativeGeocoder,NativeGeocoderOptions } from '@ionic-native/native-geocoder/ngx';
+import { AuthenticateService } from '../service/authentication.service';
+import { ClienteI } from '../models/clientes.interface';
+import { ClienteService } from '../service/cliente.service';
+import { EspecialistaI } from '../models/especialista.interface';
+import { EspecialistaService } from '../service/especialista.service';
 
 declare var google;
 
@@ -44,23 +48,34 @@ export class GeolocationPage implements OnInit,AfterViewInit {
   };
 
   map = GoogleMaps.create( 'mapElement' );
+  userEmail: string;
 
   @ViewChild('mapElement', {static: true}) mapNativeElement: ElementRef;
   constructor(
     public alertController: AlertController,
-    public authService: AuthenticationService,
+    private authService: AuthenticateService,
     private platform: Platform,
     private router: Router,
     private fcm: FCM,
     private geolocation: Geolocation,
-    private nativeGeocoder: NativeGeocoder
+    private nativeGeocoder: NativeGeocoder,
+    private clienteService: ClienteService,
+    private especialistaService: EspecialistaService
     ) { 
       this.fcm.getToken().then(token => {
         console.log(token);
-        this.authService.getUrlClientPost("/cliente/update",{"fcm":token})
-                    .then(data =>{
-                      console.log(data);
-                    });
+        if(this.authService.userDetails()){
+          console.log("enviar email:");
+          console.log(this.authService.userDetails().email);
+            this.userEmail = this.authService.userDetails().email;
+          }
+
+        this.clienteService.getCliente(this.userEmail).subscribe(cliente => {
+              cliente.fcm = token;
+              this.clienteService.updateCliente(cliente,this.userEmail);
+            });
+
+        
       });
       this.fcm.onNotification().subscribe(data => {
         console.log(data);
@@ -80,12 +95,6 @@ export class GeolocationPage implements OnInit,AfterViewInit {
     }
 
   ngOnInit() {
-    this.authService.getUrlClientGet("/cliente",{})
-                    .then(data =>{
-                      console.log(data);
-                    });
-                    
-    
   }
 
   ngAfterViewInit(): void {
@@ -96,19 +105,11 @@ export class GeolocationPage implements OnInit,AfterViewInit {
   }
 
 async presentAlert() {
-    let serv ={};
-    serv["tipo"] = "";
-    serv["seccionFalla"] = "";
-    serv["frecuenciaFalla"] = "";
-    serv["equipo"] = "";
-    serv["descripcion"]="";
-    serv["status"]="Nuevo";
-    serv["statusEquipo"] ="";
-    serv["plataforma"] = "";
-     this.authService.getUrlClientPost("/servicio/add",{"servicio" : serv})
+    
+     /*this.authService.getUrlClientPost("/servicio/add",{"servicio" : serv})
                     .then(data =>{
                       
-                    });
+                    });*/
     const alert = await this.alertController.create({
       header: 'Solicitud enviada',
       message: 'Su solicitud ha sido creada, gracias',
@@ -194,22 +195,27 @@ async presentAlert() {
     }
 
     getEspecialistasActive(){
-      
-        this.authService.getUrlClientPost("/especialista/getAll",{})
+        console.log("entro aqui");
+        let espc = this.especialistaService.getEspecialistas().subscribe(especialistas => {
+                                              console.log(especialistas);
+                                              for(var x=0;x < especialistas.length; x++){
+                                                  console.log(especialistas[x].position.latitude);
+                                                  let markerOptions: MarkerOptions = {
+                                                                position: new LatLng(especialistas[x].position.latitude 
+                                                                                      , especialistas[x].position.longitude),
+                                                                icon: {url:"assets/icon/logopqno.png"}
+                                                  };
+                                                  const marker = this.map.addMarker( markerOptions )
+                                                        .then( ( marker: Marker ) => {
+                                                          
+                                                        });
+                                                }
+                                            });
+        
+        /*this.authService.getUrlClientPost("/especialista/getAll",{})
                     .then(data =>{
-                      for(var x=0;x < data.especialistas.length; x++){
-                        console.log(data.especialistas[x].position._latitude);
-                        let markerOptions: MarkerOptions = {
-                                      position: new LatLng(data.especialistas[x].position._latitude 
-                                                            , data.especialistas[x].position._longitude),
-                                      icon: "/assets/icon/logopqno.png"
-                        };
-                        const marker = this.map.addMarker( markerOptions )
-                              .then( ( marker: Marker ) => {
-                                
-                              });
-                      }
-                    });
+                      
+                    });*/
       
     }
     //Return Comma saperated address

@@ -7,16 +7,33 @@
     <ion-card class="welcome-card" 
           color="light" style="margin-top:310px;">
       <ion-card-content >
-        <span style="color:red;">{{mensajeError}}</span>
-        <ion-item>
-          <ion-label position="floating">Email:</ion-label>
-          <ion-input [(ngModel)]="login.email"></ion-input>
-        </ion-item>
-        <ion-item>
-        <ion-label position="floating">Password:</ion-label>
-        <ion-input [(ngModel)]="login.password" type="password"></ion-input>
-      </ion-item>
-      <ion-grid>
+        <form class="form" [formGroup]="validations_form"  (ngSubmit)="loginUser(validations_form.value)">
+          <label class="error-message">{{errorMessage}}</label>
+    <ion-item>
+      <ion-label  position="floating" >E-mail</ion-label>
+      <ion-input type="text" formControlName="email"></ion-input>
+    </ion-item>
+    <div class="validation-errors">
+      <ng-container *ngFor="let validation of validation_messages.email">
+        <div class="error-message" *ngIf="validations_form.get('email').hasError(validation.type) && (validations_form.get('email').dirty || validations_form.get('email').touched)">
+          {{ validation.message }}
+        </div>
+      </ng-container>
+    </div>
+ 
+    <ion-item>
+      <ion-label  position="floating">Contraseña</ion-label>
+      <ion-input type="password" formControlName="password" class="form-controll" required></ion-input>
+    </ion-item>
+    <div class="validation-errors">
+      <ng-container *ngFor="let validation of validation_messages.password">
+        <div class="error-message" *ngIf="validations_form.get('password').hasError(validation.type) && (validations_form.get('password').dirty || validations_form.get('password').touched)">
+          {{ validation.message }}
+        </div>
+      </ng-container>
+    </div>
+
+    <ion-grid>
         <ion-row>
           <ion-col>
             <ion-button color="success" 
@@ -26,13 +43,14 @@
               </ion-button>
           </ion-col>
           <ion-col>
-            <ion-button color="primary" [disabled]=!loading
-              type="button" expand="block" (click)="createLogin()">
-                Entrar
-            </ion-button>
+            <ion-button  class="submit-btn" type="submit" expand="block" [disabled]="!validations_form.valid">Entrar</ion-button>
           </ion-col>
         </ion-row>
       </ion-grid>
+    
+ 
+    
+  </form>
       
       </ion-card-content>
     </ion-card>

@@ -2,94 +2,96 @@
   <ion-grid>
     <ion-row>
       <ion-col size="1">
-        <ion-icon style="margin-top:10px;" name="arrow-dropleft-circle" size="large" color="primary"></ion-icon>
+        <a (click)="goToBack()">
+          <ion-icon
+            style="margin-top:10px;"
+            name="arrow-dropleft-circle"
+            size="large"
+            color="primary"
+          ></ion-icon>
+        </a>  
       </ion-col>
-      <ion-col >
-        <img src="/assets/icon/logo.png" style="padding-left:10px;">
+      <ion-col>
+        <img src="/assets/icon/logo.png" style="padding-left:10px;" />
       </ion-col>
     </ion-row>
   </ion-grid>
   <div *ngIf="rechazado">
-      <div class="ion-text-center" style="font-weight:bold; font-size:25px;"> 
-        Servicio<br/>
-        #21232<br/>
-      </div>
-      <div class="ion-text-center"> 
-        Rechazado<br/>
-        Contactar con un Supervisor
-      </div>
-            
-      <ion-grid padding>
-        <ion-row>
-          <ion-col>
-            Néstor López
-          </ion-col>
-          <ion-col class="ion-text-right">
-            <ion-icon (click)="goToCall(8110707478)" name="call" size="large"></ion-icon>
-            <ion-icon name="chatboxes" size="large"></ion-icon>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            Matias Marin
-          </ion-col>
-          <ion-col class="ion-text-right">
-            <ion-icon name="call" size="large"></ion-icon>
-            <ion-icon name="chatboxes" size="large"></ion-icon>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col>
-            Lydia Gonzalez
-          </ion-col>
-          <ion-col class="ion-text-right">
-            <ion-icon name="call" size="large"></ion-icon>
-            <ion-icon name="chatboxes" size="large"></ion-icon>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
+    <div class="ion-text-center" style="font-weight:bold; font-size:25px;">
+      Servicio
+      <br />
+      # {{ servicio.servicio }}
+      <br />
+    </div>
+    <div class="ion-text-center">
+      Rechazado
+      <br />
+      Contactar con un Supervisor
+    </div>
+
+    <ion-grid padding>
+      <ion-row class="cols" *ngFor="let especialista of especialistas" >
+        <ion-col >
+          <br>
+          <span style="font-size:18px; font-weight:bold;">{{ especialista.name }}</span>
+        </ion-col>
+        <ion-col class="ion-text-right">
+          <ion-icon
+            (click)="goToCall(especialista.celular)"
+            name="call"
+            style="font-size:50px"
+            color="success"
+          ></ion-icon>
+          <ion-icon name="chatboxes" color="primary"
+          style="font-size:50px"></ion-icon>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </div>
   <div *ngIf="!rechazado">
-          <div class="ion-text-center" style="font-weight:bold; font-size:25px;"> 
-            Servicio<br/>
-            # {{servicio.servicio}}<br/>
-          </div>
-          <div class="ion-text-center"> 
-            Aceptado
-          </div>
-        <ion-item>
-          <ion-label position="floating">Tipo de Servicio:</ion-label>
-          
-          <ion-input disabled [(ngModel)]="servicio.tipo"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="floating">Fecha de Servicio:</ion-label>
-          <ion-datetime disabled [(ngModel)]="servicio.dateServicio"></ion-datetime>
-        </ion-item>
-        <ion-item>
-          <ion-label position="floating">Equipo:</ion-label>
-          <ion-input disabled value="{{servicio.equipo}}"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="floating">Descripción General de Servicio:</ion-label>          
-          <ion-textarea disabled value="{{servicio.descripcion}}"></ion-textarea>
-        </ion-item>
-        <ion-item>
-          <ion-label position="floating">Sección de Falla:</ion-label>
-          <ion-input disabled value="{{servicio.seccionFalla}}"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="floating">Frecuencia de Falla:</ion-label>
-          <ion-input disabled value="{{servicio.frecuenciaFalla}}"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="floating">Severidad:</ion-label>
-          <ion-input disabled value="{{servicio.severidad}}"></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="floating">Plataforma:</ion-label>
-          <ion-input disabled value="{{servicio.plataforma}}"></ion-input>
-        </ion-item>
-        
-  </div>      
+    <div class="ion-text-center" style="font-weight:bold; font-size:25px;">
+      Servicio
+      <br />
+      # {{ servicio.servicio }}
+      <br />
+    </div>
+    <div class="ion-text-center">
+      Aceptado
+    </div>
+    <ion-item>
+      <ion-label position="floating">Tipo de Servicio:</ion-label>
+
+      <ion-input disabled [(ngModel)]="servicio.tipo"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Fecha de Servicio:</ion-label>
+      <ion-datetime disabled [(ngModel)]="servicio.dateServicio"></ion-datetime>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Equipo:</ion-label>
+      <ion-input disabled value="{{ servicio.equipo }}"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">
+        Descripción General de Servicio:
+      </ion-label>
+      <ion-textarea disabled value="{{ servicio.descripcion }}"></ion-textarea>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Sección de Falla:</ion-label>
+      <ion-input disabled value="{{ servicio.seccionFalla }}"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Frecuencia de Falla:</ion-label>
+      <ion-input disabled value="{{ servicio.frecuenciaFalla }}"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Severidad:</ion-label>
+      <ion-input disabled value="{{ servicio.severidad }}"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Plataforma:</ion-label>
+      <ion-input disabled value="{{ servicio.plataforma }}"></ion-input>
+    </ion-item>
+  </div>
 </ion-content>
