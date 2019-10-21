@@ -16,6 +16,7 @@ $RECYCLE.BIN/
 *.log
 log.txt
 npm-debug.log*
+config.xml
 
 /.idea
 /.ionic
@@ -26,5 +27,6 @@ npm-debug.log*
 /coverage
 /dist
 /node_modules/*
-/platforms/android/google-service.json
+/platforms/*
+
 
