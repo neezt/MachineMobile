@@ -1,44 +1,56 @@
-<ion-content>
-<ion-grid>
+<ion-header translucent>
+  <ion-grid>
     <ion-row>
       <ion-col size="1">
-        <ion-icon style="margin-top:10px;" name="arrow-dropleft-circle" size="large" color="primary"></ion-icon>
+        <a (click)="goToBack()">
+          <ion-icon
+            style="margin-top:10px;"
+            name="arrow-dropleft-circle"
+            size="large"
+            color="primary"
+          ></ion-icon>
+        </a>
       </ion-col>
-      <ion-col >
-        <img src="/assets/icon/logo.png" style="padding-left:10px;">
+      <ion-col>
+        <img src="/assets/icon/logo.png" style="padding-left:10px;" />
       </ion-col>
     </ion-row>
   </ion-grid>
+</ion-header>
+
+
+<ion-content>
+
 <div class="ion-text-center" style="font-weight:bold; font-size:25px;"> 
           Servicio<br/>
-          #21232<br/>
+          #{{servicio.servicio}}<br/>
         </div>
         <div class="ion-text-center"> 
             Reporte de Progreso
         </div>
+        <ion-label padding>Equipo:</ion-label>
         <ion-item>
-          <ion-label position="floating">Empresa:</ion-label>
-          <ion-input></ion-input>
+          <ion-input disabled *ngIf="servicio.equipo" value="{{servicio.equipo}}"></ion-input>
         </ion-item>
-        <ion-item>
-          <ion-label position="floating">Equipo:</ion-label>
-          <ion-input></ion-input>
-        </ion-item>
-        <div padding>      
-          <img src="/assets/shapes.svg">
+        <div padding *ngIf="servicio.notas">      
+          <a (click)="showImage()">
+              <img  src="{{servicio.notas[servicio.notas.length-1].foto}}">
+          </a>
         </div>
-        <ion-grid padding>
-        <ion-row>
+        <ion-grid padding *ngIf="servicio.notas">
+        <ion-row *ngIf="servicio.notas[servicio.notas.length-1].archivo">
           <ion-col>
             Archivo Adjunto
           </ion-col>
-          <ion-col>
-            <a > archivo.pdf</a>
+          <ion-col >
+            <a href="{{servicio.notas[servicio.notas.length-1].archivo.ruta}}"> {{servicio.notas[servicio.notas.length-1].archivo.fileName}}</a>
           </ion-col>
         </ion-row>
       </ion-grid>
+      <ion-label padding>Comentario:</ion-label>
         <ion-item>
-          <ion-label position="floating">Comentario:</ion-label>
-          <ion-textarea rows="5"></ion-textarea>
+          <ion-textarea rows="5" disabled *ngIf="servicio.notas" >
+            {{servicio.notas[servicio.notas.length-1].mensaje}}
+          </ion-textarea>
         </ion-item>
 </ion-content>

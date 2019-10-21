@@ -75,7 +75,7 @@ export class EspecialistaSitioPage implements OnInit, AfterViewInit {
   }
 
   goToBack(){
-      this.router.navigateByUrl('/geolocation');
+      this.router.navigateByUrl('/servicios');
   }
 
 async presentAlert() {

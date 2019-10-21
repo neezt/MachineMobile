@@ -9,5 +9,4 @@ export interface ClienteI {
     status: boolean;
     telefono:string;
     celular : string;
-
 }

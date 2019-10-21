@@ -3,15 +3,22 @@ export interface ServicioI {
     clienteId: string;
     especialista: any;
     createdAt: any;
+    commentarios: string;
     descripcion: string;
+    direccion : string;
     fechaServicio: any;
+    fechaInicio: any;
+    fechaFinaliza: any;
+    tiempoTrabajo: any;
     equipo: string;
     frecuenciaFalla:string;
     plataforma : string;
     seccionFalla : string;
     servicio : number;
     status : string;
+    statusEquipo: string;
     tipo : string;
-    direccion : string;
-    position: any
+    position: any;
+    notas: any;
+    cliente: any;
 }

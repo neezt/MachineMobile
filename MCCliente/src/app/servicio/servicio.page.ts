@@ -1,10 +1,13 @@
-import { Component, OnInit,OnDestroy } from '@angular/core';
+import { Component, OnInit,OnDestroy,ChangeDetectionStrategy,
+         ChangeDetectorRef } from '@angular/core';
 import { Router,ActivatedRoute  } from '@angular/router';
 import { Platform,AlertController } from '@ionic/angular';
 import { ServicioI } from '../models/servicios.interface';
 import { ServicioService } from '../service/servicio.service';
 import { EspecialistaService } from '../service/especialista.service';
 import { AuthenticateService } from '../service/authentication.service';
+import { ApiService } from '../api/api.service';
+import * as firebase from 'firebase';
 
 @Component({
   selector: 'app-servicio',
@@ -13,23 +16,33 @@ import { AuthenticateService } from '../service/authentication.service';
 })
 export class ServicioPage implements OnInit,OnDestroy {
   backButtonSubscription; 
+  fechaServicio=false;
+  servicioId:string;
   servicio: ServicioI ={
                 clienteId: '',
                 especialista: null,
-                createdAt: null,
+                createdAt: firebase.firestore.Timestamp,
+                commentarios: '',
                 descripcion: '',
-                fechaServicio: null,
-                equipo: "",
-                frecuenciaFalla:"",
-                plataforma : "",
-                seccionFalla : "",
+                direccion : '',
+                fechaServicio: firebase.firestore.Timestamp,
+                fechaInicio: null,
+                fechaFinaliza: null,
+                tiempoTrabajo: null,
+                equipo: '',
+                frecuenciaFalla:'',
+                plataforma : '',
+                seccionFalla : '',
                 servicio : 0,
-                status : "",
-                tipo : "",
-                direccion : "",
-                position: null
-            }
-  showCancel = true;
+                status : '',
+                statusEquipo: '',
+                tipo : '',
+                position: null,
+                notas: null,
+                cliente: null
+            };
+  showCancel = false;
+  showLoad= false;
 
   constructor(
     private servicioService: ServicioService,
@@ -37,12 +50,14 @@ export class ServicioPage implements OnInit,OnDestroy {
     private thisRoute:ActivatedRoute,
     private router: Router,
     public alertController: AlertController,
-    private authService: AuthenticateService
+    private authService: AuthenticateService,
+    private cd: ChangeDetectorRef,
+    private api: ApiService
   ) { 
     this.thisRoute.queryParams.subscribe(params => {
         this.getServicio(params.servicio);
     });
-    console.log(this.thisRoute.snapshot.paramMap);
+    
   }
 
   ngOnInit() {
@@ -50,17 +65,35 @@ export class ServicioPage implements OnInit,OnDestroy {
   }
 
   async getServicio(id){
-    console.log(id);
+    console.log(this.servicio);
+    this.servicioId=id;
     let servActivo = this.servicioService.getServicio(id)
                         .subscribe(servs => {
+                            console.log(servs);
                               this.servicio = servs;
-                              console.log(this.servicio);
+                              this.fechaServicio=true;
+                              this.cd.detectChanges();
+                              if(this.servicio.status !=="Terminado"){
+                                if(this.servicio.status !=="Finalizado"){
+                                    if(this.servicio.status !=="Cerrado"){
+                                      if(this.servicio.status !=="Cancelado"){
+                                        console.log("estatus: "+ this.servicio.status);
+                                        this.showCancel=true;  
+                                        this.cd.detectChanges();
+                                      }
+                                    }
+                                }
+                              }
                               servActivo.unsubscribe();
                         });
   }
 
   goToBack(){
       this.router.navigateByUrl('/servicios');
+  }
+
+  showNotes(){
+      this.router.navigateByUrl('/notas?servicio='+this.servicioId);
   }
 
   ngOnDestroy() {
@@ -82,12 +115,18 @@ export class ServicioPage implements OnInit,OnDestroy {
         }, {
           text: 'Si',
           handler: () => {
-            console.log(this.servicio.id);
-            let serv ={"servicio" : this.servicio.id, "status" : "Cancelado"};
-            /*this.authService.getUrlClientPost("/servicio/update",serv)
+            this.showLoad=true;
+            this.showCancel=false;  
+            let serv ={"servicio" : this.servicioId};
+            this.servicio.status='Cancelado';
+            this.servicioService.updateServicio(this.servicio,this.servicioId);
+            this.api.getUrlClientPost("/servicio/cancel",serv)
                     .then(data =>{
+                      this.showLoad=false;
+                      this.presentAlert();
+                      this.cd.detectChanges();
                       console.log('Confirm Ok');
-                    });*/
+                    });
           }
         }
       ]
@@ -95,4 +134,15 @@ export class ServicioPage implements OnInit,OnDestroy {
 
     await alert.present();
   }
+
+  async presentAlert() {
+    const alert = await this.alertController.create({
+      header: 'Servicio Cancelado',
+      message: 'Se cancelo tu servicio',
+      buttons: ['OK']
+    });
+
+    await alert.present();
+  }
+
 }

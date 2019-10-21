@@ -19,6 +19,7 @@ import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { AuthenticateService } from './service/authentication.service';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
 
 import * as firebase from 'firebase';
 firebase.initializeApp(environment.firebaseConfig);
@@ -47,6 +48,7 @@ firebase.initializeApp(environment.firebaseConfig);
     NativeGeocoder,
     CallNumber,
     AuthenticateService,
+    PhotoViewer,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

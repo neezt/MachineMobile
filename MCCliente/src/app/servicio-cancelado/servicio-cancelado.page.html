@@ -1,50 +1,55 @@
-<ion-content>
+<ion-header translucent>
   <ion-grid>
     <ion-row>
       <ion-col size="1">
-        <ion-icon style="margin-top:10px;" name="arrow-dropleft-circle" size="large" color="primary"></ion-icon>
+        <a (click)="goToBack()">
+          <ion-icon
+            style="margin-top:10px;"
+            name="arrow-dropleft-circle"
+            size="large"
+            color="primary"
+          ></ion-icon>
+        </a>
       </ion-col>
-      <ion-col >
-        <img src="/assets/icon/logo.png" style="padding-left:10px;">
+      <ion-col>
+        <img src="/assets/icon/logo.png" style="padding-left:10px;" />
       </ion-col>
     </ion-row>
   </ion-grid>
+</ion-header>
+
+<ion-content>
+  
         <div class="ion-text-center" style="font-weight:bold; font-size:25px;"> 
           Servicio<br/>
-          #21232<br/>
+          #{{servicio.servicio}}<br/>
         </div>
         <div class="ion-text-center"> 
           Cancelado
         </div>
         <ion-item>
-          <ion-label position="floating">Empresa:</ion-label>
-          <ion-input></ion-input>
-        </ion-item>
-        <ion-item>
-          <ion-label position="floating">Cliente:</ion-label>
-          <ion-input></ion-input>
-        </ion-item>
-        <ion-item>
           <ion-label position="floating">Especialista:</ion-label>
-          <ion-input></ion-input>
+          <ion-input disabled *ngIf="servicio.especialista" value="{{servicio.especialista.name}}"></ion-input>
         </ion-item>
         <ion-item>
           <ion-label position="floating">Fecha de Solicitada:</ion-label>
-          <ion-datetime></ion-datetime>
+          <ion-input disabled *ngIf="servicio.fechaServicio" value="{{
+                                      servicio.fechaServicio.toDate() | date: 'dd-MM-yyyy HH:mm:ss'
+                                    }}"></ion-input>
         </ion-item>
-        <ion-item>
-          <ion-label position="floating">Comentarios:</ion-label>          
-          <ion-textarea></ion-textarea>
-        </ion-item>
-        <div class="ion-text-center" 
+        <br/>
+        <br/>
+        <div class="ion-text-center" *ngIf="servicio.especialista"
         style="font-weight:bold; font-size:20px;"> 
           Contactar a<br>
-          Néstor Lópéz
+          {{servicio.especialista.name}}
         </div>
          <ion-grid>
           <ion-row>
             <ion-col align-self-center offset="2">
-                <ion-icon name="call" style="font-size:80px;" color="primary"></ion-icon>
+                <ion-icon name="call" 
+                  (click)="goToCall()"
+                  style="font-size:80px;" color="primary"></ion-icon>
             </ion-col>
             <ion-col align-self-center>
               <ion-icon name="chatboxes" style="font-size:80px;" color="success"></ion-icon>

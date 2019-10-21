@@ -79,7 +79,8 @@
     </ion-select>
   </ion-item>
 </ion-header>
-<ion-content>
+
+<ion-content forceOverscroll>
   <div class="fixed">
   <ion-card
     *ngFor="let servicio of servicios"
@@ -94,11 +95,11 @@
       </ion-row>
       <ion-row>
         <ion-col>
-          Especialista: Néstor López
+          Especialista: {{servicio.especialista.name}}
         </ion-col>
       </ion-row>
       <ion-row>
-        <ion-col>Fecha: {{ servicio.dateServicio }}</ion-col>
+        <ion-col >Fecha: {{ servicio.fechaServicio.toDate() | date:'dd-MM-yyyy HH:mm:ss' }}</ion-col>
       </ion-row>
     </ion-card-content>
   </ion-card>

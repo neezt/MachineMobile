@@ -24,23 +24,74 @@
     </ion-row>
   </ion-grid>
   
-  <div #mapElement id="mapElement" [ngClass]="ishidden ? 'map100' : 'map'" ></div>
+  <div #mapElement id="mapElement" [ngClass]="classHtml" ></div>
 
-  <ion-grid fixed [hidden]=ishidden>
+  <ion-grid fixed *ngIf="servicios">
     <ion-row>
       <ion-col size="12">
         <ion-segment scrollable background="tertiary">
           <ion-segment-button 
-            *ngFor="let servicio of servicios"
+            *ngFor="let servicio of servicios; let i=index "
             value ="{{ servicio}}"
-            (click)="clickServicio(servicio)">
+            (click)="clickServicio(i)">
               <ion-label 
                 style="padding-left:20px;padding-right:20px; font-weight:bold;">
-                  {{ servicio }}
+                  {{ servicio.servicio }}
               </ion-label>
           </ion-segment-button>
         </ion-segment>
       </ion-col>
+    </ion-row>
+    <ion-row *ngIf="hasNotes">
+      <ol class="progress progress">
+        <li class="is-nuevo" data-step="1">
+          Nuevo
+        </li>
+        <li [ngClass]="numStatus >= 1 ? 'is-aceptado':'progress__last' " data-step="2">
+          Aceptado
+        </li>
+        <li [ngClass]="numStatus >= 2 ? 'is-ruta':'progress__last' " data-step="3">
+          En Ruta
+        </li>
+        <li data-step="4" [ngClass]="numStatus >= 3 ? 'is-progreso':'progress__last' ">
+          En Progreso
+        </li>
+        <li data-step="5" [ngClass]="numStatus >= 4 ? 'is-finalizado':'progress__last'">
+          Finalizado
+        </li>
+        <li data-step="6" [ngClass]="numStatus >= 5 ? 'is-aceptado':'progress__last'">
+          Terminado
+        </li>
+      </ol>
+      <ion-segment scrollable>
+          <ion-segment-button >
+              <ion-label 
+                style="padding-left:20px;padding-right:20px; font-weight:bold;">
+                  Nuevo
+              </ion-label>
+          </ion-segment-button>
+        </ion-segment>
+    </ion-row>
+    <ion-row *ngIf="notas.length > 0">
+      <div style="overflow: scroll !important; height:320px;">
+        <ion-card *ngFor="let nota of notas; let i=index">
+          <ion-card-content>
+            <ion-row>
+              <ion-col>
+                  <a (click)="showImage(i)"><img src="{{nota.foto}}" height="75" width="60"></a>
+              </ion-col>
+              <ion-col>
+                {{nota.mensaje}}
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col>
+                {{nota.fecha.toDate() | date:'dd-MM-yyyy HH:mm:ss'}}
+              </ion-col>
+            </ion-row>
+          </ion-card-content>
+        </ion-card>
+        </div>
     </ion-row>
   </ion-grid>
   

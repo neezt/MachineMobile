@@ -1,4 +1,5 @@
-import {AfterViewInit, Component, OnDestroy, ElementRef, OnInit, ViewChild} from '@angular/core';
+import {AfterViewInit, Component, OnDestroy, ElementRef, OnInit, ViewChild,ChangeDetectionStrategy,
+         ChangeDetectorRef} from '@angular/core';
 import {
   GoogleMaps,
   GoogleMap,
@@ -22,6 +23,7 @@ import { ServicioI } from '../models/servicios.interface';
 import { ServicioService } from '../service/servicio.service';
 import { ConfigurationI } from '../models/configuration.interface';
 import { ConfigurationService } from '../service/configuration.service';
+import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
 import * as firebase from 'firebase';
 
 declare var google;
@@ -34,9 +36,9 @@ declare var google;
 export class GeolocationPage implements OnInit,AfterViewInit {
   latitude: any;
   longitude: any;
-  servicios = ['12121','12234','00121','010121','121212','12121','12234','20121','514131','124232'];
+  servicios = [];
   ishidden = false;
-  
+  classHtml ="";
   geoLatitude: number;
   geoLongitude: number;
   geoAccuracy:number;
@@ -45,7 +47,8 @@ export class GeolocationPage implements OnInit,AfterViewInit {
   watchLocationUpdates:any; 
   loading:any;
   isWatching:boolean;
- 
+  hasNotes=false;
+  indexLast;
   //Geocoder configuration
   geoencoderOptions: NativeGeocoderOptions = {
     useLocale: true,
@@ -59,20 +62,28 @@ export class GeolocationPage implements OnInit,AfterViewInit {
                 clienteId: '',
                 especialista: null,
                 createdAt: null,
+                commentarios: '',
                 descripcion: '',
+                direccion : '',
                 fechaServicio: null,
-                equipo: "",
-                frecuenciaFalla:"",
-                plataforma : "",
-                seccionFalla : "",
+                fechaInicio: null,
+                fechaFinaliza: null,
+                tiempoTrabajo: null,
+                equipo: '',
+                frecuenciaFalla:'',
+                plataforma : '',
+                seccionFalla : '',
                 servicio : 0,
-                status : "Nuevo",
-                tipo : "",
-                direccion : "",
-                position: null
-            }
+                status : '',
+                statusEquipo: '',
+                tipo : '',
+                position: null,
+                notas: null,
+                cliente: null
+            };
   gmarkers = [];
-
+  notas= [];
+  numStatus=1;
   @ViewChild('mapElement', {static: true}) mapNativeElement: ElementRef;
   constructor(
     public alertController: AlertController,
@@ -86,13 +97,14 @@ export class GeolocationPage implements OnInit,AfterViewInit {
     private especialistaService: EspecialistaService,
     private servicioService: ServicioService,
     private configurationService: ConfigurationService,
-    private apiService:ApiService
+    private apiService:ApiService,
+    private cd: ChangeDetectorRef,
+    private photoViewer: PhotoViewer
     ) { 
+      this.classHtml="map100";
       this.fcm.getToken().then(token => {
         console.log(token);
-        if(this.authService.userDetails()){
-          console.log("enviar email:");
-          console.log(this.authService.getUser());
+        
           this.authService.getUser()
                   .then(data =>{
                     this.userDetail = data;
@@ -102,8 +114,18 @@ export class GeolocationPage implements OnInit,AfterViewInit {
                           this.clienteService.updateCliente(cliente,this.userDetail.email);
                           clientSubs.unsubscribe();
                     });
+
+                    console.log("comienza busqueda");
+                    this.servicioService.getServicios(this.userDetail.uid).subscribe(servs => {
+                            console.log("busca servicios");
+                              console.log(servs);
+                              if(servs.length>0){
+                                this.classHtml="map";
+                              }
+                              this.servicios = servs;
+                              
+                            });
           });
-          }
         
       });
       this.fcm.onNotification().subscribe(data => {
@@ -113,13 +135,9 @@ export class GeolocationPage implements OnInit,AfterViewInit {
         } else {
           console.log('Received in foreground');
         }
-        if(data.landing_page === 'especialista-sitio'){
-          this.router.navigateByUrl("/"+data.landing_page+'?servicio='+data.servicio+'&especialista='+data.especialista);
-        }
-        if(data.landing_page === 'servicio-rechazado'){
-          this.router.navigateByUrl("/"+data.landing_page+'?servicio='+data.servicio + '&status='+data.status);
-        }
-        //this.router.navigate( [data.landing_page, { "servicio": data.servicio } ]);
+        
+        this.router.navigateByUrl("/"+data.landing_page+'?servicio='+data.servicio);
+        
       });
     }
 
@@ -139,6 +157,10 @@ async presentAlert() {
           });
 
     this.servicio.clienteId= this.userDetail.uid;
+    this.servicio.cliente={
+      "handle": this.userDetail.email,
+      "uid":this.userDetail.uid
+    }
     this.servicio.createdAt= new Date();
     this.servicio.fechaServicio = new Date(new Date().getTime() + 1000 * 60 * 60 * 2);
     this.servicio.status="Nuevo";
@@ -208,8 +230,40 @@ async presentAlert() {
   }
 
   async clickServicio(servicio) {
-    
-      console.log("es un servicio " + servicio);
+    console.log(servicio);
+    this.hasNotes=false;
+      if(this.indexLast === servicio){
+        this.classHtml="map";
+        this.notas=[];
+        this.indexLast=null;
+      } else{
+          this.indexLast=servicio;
+          this.classHtml="map50";
+          if(this.servicios[servicio].notas){
+              this.notas=this.servicios[servicio].notas;
+          } else{
+            this.classHtml="map80";
+            this.notas=[];
+            this.hasNotes=true;  
+          }
+          if(this.servicios[servicio].status==="Aceptado"){
+            this.numStatus=1;
+          }
+          if(this.servicios[servicio].status==="En Ruta"){
+            this.numStatus=2;
+          }
+          if(this.servicios[servicio].status==="En Progreso"){
+            this.numStatus=3;
+          }
+          if(this.servicios[servicio].status==="Finalizado"){
+            this.numStatus=4;
+          }
+          if(this.servicios[servicio].status==="Terminado"){
+            this.numStatus=5;
+          }
+          console.log("es un servicio " + servicio);
+      }
+      this.cd.detectChanges();
   }
 
   loadMap() {
@@ -243,10 +297,9 @@ async presentAlert() {
     }
 
     getEspecialistasActive(){
-        console.log("entro aqui");
+
         let espc = this.especialistaService.getEspecialistas().subscribe(especialistas => {
                                               console.log(especialistas);
-                                              //this.removeMarkers();
                                               for(var x=0;x < especialistas.length; x++){
                                                   console.log(especialistas[x].position.latitude);
                                                   if(this.gmarkers[x]){
@@ -315,4 +368,7 @@ async presentAlert() {
       this.watchLocationUpdates.unsubscribe();
     }
 
+    showImage(image){
+        this.photoViewer.show(this.notas[image].foto);
+    }
 }

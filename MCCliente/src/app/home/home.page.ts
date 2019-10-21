@@ -33,6 +33,7 @@ export class HomePage {
         Validators.required
       ])),
     });
+
   }
 
   validation_messages = {
@@ -45,27 +46,31 @@ export class HomePage {
   };
   
   loginUser(value){
+    this.loading=true;
     this.authService.loginUser(value)
     .then(res => {
       console.log(res);
       this.errorMessage = "";
       console.log("clientes");
       console.log(res.user.email);
-      this.clienteService.getCliente(res.user.email).subscribe(cliente => {
-              if(cliente !== undefined){
-                console.log(cliente);
-                this.router.navigate(['geolocation']);
-              } else{
-                this.authService.logoutUser()
-                    .then(res => {
-                      console.log(res);
-                    }).catch(error => {
-                      console.log(error);
-                    })
-                this.errorMessage = "E-mail o contraseña incorrecta";
-              }
-              
-            });
+      
+      let clienteSub = this.clienteService.getCliente(res.user.email).subscribe(cliente => {
+                          clienteSub.unsubscribe(); 
+                          if(cliente !== undefined){
+                            console.log(cliente);
+                            this.loading=false;
+                            this.router.navigateByUrl('/geolocation');
+                          } else{
+                            this.authService.logoutUser()
+                                .then(res => {
+                                  console.log(res);
+                                }).catch(error => {
+                                  console.log(error);
+                                })
+                            this.errorMessage = "E-mail o contraseña incorrecta";
+                          }
+                           
+                        });
       
     }, err => {
       console.log(err);

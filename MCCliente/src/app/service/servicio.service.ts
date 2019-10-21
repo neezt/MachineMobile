@@ -30,8 +30,10 @@ export class ServicioService {
   }
 
   getServicios(user){
+    //const query = this.serviciosCollection.ref;
     this.serviciosCollection = this.db.collection<ServicioI>('servicios',
-                        ref => ref.where('clienteId', '==', user));
+                        ref => ref.where('cliente.uid', '==', user));
+    
                         this.servicios = this.serviciosCollection.snapshotChanges().pipe(
                           map(actions => {
                             return actions.map(a => {

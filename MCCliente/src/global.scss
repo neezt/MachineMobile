@@ -27,7 +27,7 @@
 
 .map{
   position: relative;
-  height: 90%;
+  height: 92%;
   margin-top:-15px;
 }
 .map100{
@@ -35,7 +35,16 @@
   height: 100%;
   margin-top:-20px;
 }
-
+.map80{
+  position: relative;
+  height: 85%;
+  margin-top:-15px;
+}
+.map50{
+  position: relative;
+  height: 50%;
+  margin-top:-15px;
+}
 rating {
   button{
           width: 40px;
