@@ -1,4 +1,5 @@
-import { Component } from '@angular/core';
+import { Component ,ChangeDetectionStrategy,
+         ChangeDetectorRef} from '@angular/core';
 import { Router } from '@angular/router';
 import { FormGroup, FormBuilder, Validators, FormControl } from '@angular/forms';
 import { AuthenticateService } from '../service/authentication.service';
@@ -21,6 +22,7 @@ export class HomePage {
     private authService: AuthenticateService,
     private formBuilder: FormBuilder,
     private router: Router,
+    private cd: ChangeDetectorRef,
     private clienteService: ClienteService
   ) {  
     this.validations_form = this.formBuilder.group({
@@ -47,6 +49,7 @@ export class HomePage {
   
   loginUser(value){
     this.loading=true;
+    this.cd.detectChanges();
     this.authService.loginUser(value)
     .then(res => {
       console.log(res);

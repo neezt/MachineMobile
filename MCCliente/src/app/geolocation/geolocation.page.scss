@@ -68,12 +68,12 @@ $mute: #DFE3E4;
       }
     }
     &.is-aceptado {
-      color: $active;
+      color: $complete;
       
       &:before,
       &:after {
         color: #FFF;
-        background: $active;
+        background: $complete;
       }
     }
     &.is-ruta {
@@ -85,11 +85,11 @@ $mute: #DFE3E4;
       }
     }
     &.is-progreso {
-      color: $active;
+      color: $complete;
       &:before,
       &:after {
         color: #FFF;
-        background: $active;
+        background: $complete;
       }
     }
     &.is-finalizado {
@@ -101,11 +101,11 @@ $mute: #DFE3E4;
       }
     }
     &.is-terminado {
-      color: $active;
+      color: $complete;
       
       &:before {
         color: #FFF;
-        background: $active;
+        background: $complete;
       }
     }
   }

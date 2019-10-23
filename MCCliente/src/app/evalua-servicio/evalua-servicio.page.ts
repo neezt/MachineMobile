@@ -3,6 +3,8 @@ import { AuthenticateService } from '../service/authentication.service';
 import { Router,ActivatedRoute  } from '@angular/router';
 import { ServicioI } from '../models/servicios.interface';
 import { ServicioService } from '../service/servicio.service';
+import { Platform,AlertController } from '@ionic/angular';
+import { ApiService } from '../api/api.service';
 import * as firebase from 'firebase';
 
 @Component({
@@ -35,13 +37,23 @@ export class EvaluaServicioPage implements OnInit,OnDestroy {
                 position: null,
                 notas: null,
                 cliente: null,
-                evaluacion: null
+                evaluacion: {
+                  puntualidad:0,
+                  dominio:0,
+                  proceso:0,
+                  orden:0,
+                  empatia:0,
+                  rapidez:0,
+                  comunicacion:0
+                }
             };
   servicioId="";
-
+  showBoton = true;
   constructor(
+    public alertController: AlertController,
     private thisRoute:ActivatedRoute,
     private router: Router,
+    private api: ApiService,
     private servicioService: ServicioService
   ) { 
     this.thisRoute.queryParams.subscribe(params => {
@@ -62,12 +74,33 @@ export class EvaluaServicioPage implements OnInit,OnDestroy {
       let observatorServ = this.servicioService.getServicio(obj.servicio)
                             .subscribe(servicio => {
                             this.servicio = servicio; 
+                            console.log(this.servicio);
                           observatorServ.unsubscribe();
                 });
     }
 
-  updateServicio(){
+  async updateServicio(){
+    this.showBoton=false;
     this.servicioService.updateServicio(this.servicio, this.servicioId);
+    this.api.getUrlClientPost("/servicio/evaluationFinish",{"servicio":this.servicioId})
+                    .then(data =>{
+                      console.log('Confirm Ok');
+                    });
+    const alert = await this.alertController.create({
+      header: 'Evaluacion enviada',
+      message: 'Muchas gracias por su tiempo',
+      buttons: [{
+          text: 'Terminar',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: () => {
+            this.router.navigateByUrl('/servicio?servicio='+this.servicioId);
+            
+          }
+        }]
+    });
+
+    await alert.present();
   }
   
   goToBack(){

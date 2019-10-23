@@ -1,9 +1,132 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-title>servicioTerminado</ion-title>
-  </ion-toolbar>
+<ion-header translucent>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="1">
+        <a (click)="goToBack()">
+          <ion-icon
+            style="margin-top:10px;"
+            name="arrow-dropleft-circle"
+            size="large"
+            color="primary"
+          ></ion-icon>
+        </a>
+      </ion-col>
+      <ion-col>
+        <img src="/assets/icon/logo.png" style="padding-left:10px;" />
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-header>
 
-<ion-content>
-
+<ion-content forceOverscroll>
+  <br/>
+  <ion-label padding >Servicio:</ion-label>
+  <ion-item>
+    <ion-input disabled value="{{ servicio.servicio }}"></ion-input>
+  </ion-item>
+  <ion-label padding>Tipo de Servicio:</ion-label>
+  <ion-item>
+    <ion-input disabled value="{{ servicio.tipo }}"></ion-input>
+  </ion-item>
+  <ion-label padding>Fecha de Servicio:</ion-label>
+  <ion-item>
+    <ion-input
+      *ngIf="fechaServicio"
+      disabled
+      value="{{
+        servicio.fechaServicio.toDate() | date: 'dd-MM-yyyy HH:mm:ss'
+      }}"
+    ></ion-input>
+  </ion-item>
+  <ion-label padding>Estatus de Servicio:</ion-label>
+  <ion-item>
+    <ion-input disabled value="{{ servicio.status }}"></ion-input>
+  </ion-item>
+  <ion-label padding>Equipo:</ion-label>
+  <ion-item>
+    <ion-input disabled value="{{ servicio.equipo }}"></ion-input>
+  </ion-item>
+  <ion-label padding>Descripción General de Servicio:</ion-label>
+  <ion-item>
+    <ion-textarea disabled value="{{ servicio.descripcion }}"></ion-textarea>
+  </ion-item>
+  <ion-label padding>Sección de Falla:</ion-label>
+  <ion-item>
+    <ion-input disabled value="{{ servicio.seccionFalla }}"></ion-input>
+  </ion-item>
+  <ion-label padding>Frecuencia de Falla:</ion-label>
+  <ion-item>
+    <ion-input disabled value="{{ servicio.frecuenciaFalla }}"></ion-input>
+  </ion-item>
+  <ion-label padding>Severidad:</ion-label>
+  <ion-item>
+    <ion-input disabled value="{{ servicio.severidad }}"></ion-input>
+  </ion-item>
+  <ion-label padding>Plataforma:</ion-label>
+  <ion-item>
+    <ion-input disabled value="{{ servicio.plataforma }}"></ion-input>
+  </ion-item>
+  <ion-label padding>Estatus de Equipo:</ion-label>
+  <ion-item>
+    <ion-input disabled value="{{ servicio.statusEquipo }}"></ion-input>
+  </ion-item>
+  <ion-label padding>Fecha de Inicio de Servicio:</ion-label>
+  <ion-item>
+    <ion-input
+      *ngIf="servicio.fechaInicio"
+      disabled
+      value="{{ servicio.fechaInicio.toDate() | date: 'dd-MM-yyyy HH:mm:ss' }}"
+    ></ion-input>
+    <ion-input *ngIf="!servicio.fechaInicio" disabled value=""></ion-input>
+  </ion-item>
+  <ion-label padding>
+      Fecha de Finalización de servicio:
+    </ion-label>
+  <ion-item>
+    <ion-input
+      *ngIf="servicio.fechaFinaliza"
+      disabled
+      value="{{
+        servicio.fechaFinaliza.toDate() | date: 'dd-MM-yyyy HH:mm:ss'
+      }}"
+    ></ion-input>
+    <ion-input *ngIf="!servicio.fechaFinaliza" disabled value=""></ion-input>
+  </ion-item>
+  <ion-label padding>Tiempo de Trabajo Total:</ion-label>
+  <ion-item>
+    <ion-input disabled value="{{ servicio.tiempoTrabajo }}"></ion-input>
+  </ion-item>
+  <ion-label padding>Comentarios:</ion-label>
+  <ion-item>
+    <ion-input [(ngModel)]="servicio.comentarios"></ion-input>
+  </ion-item>
+  
+  <ion-grid>
+    <ion-row>
+      <ion-col >
+        <ion-button
+          color="primary"
+          size="block"
+          (click)="terminarServicio('OK')">
+          ESTOY DE ACUERDO
+        </ion-button>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <ion-button
+          color="danger"
+          size="block"
+          (click)="terminarServicio('DESACUERDO')"
+        >
+          NO ESTOY DE ACUERDO
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-progress-bar
+    *ngIf="showLoad"
+    type="indeterminate"
+    reversed="true"
+  ></ion-progress-bar>
 </ion-content>

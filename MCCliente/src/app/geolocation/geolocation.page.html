@@ -32,11 +32,12 @@
   <ion-grid fixed *ngIf="servicios">
     <ion-row>
       <ion-col size="12">
-        <ion-segment scrollable background="tertiary">
+        <ion-segment scrollable>
           <ion-segment-button 
             *ngFor="let servicio of servicios; let i=index "
-            value ="{{ servicio}}"
-            (click)="clickServicio(i)">
+            (ionSelect)="clickServicio(i)"
+            >
+            
               <ion-label 
                 style="padding-left:20px;padding-right:20px; font-weight:bold;">
                   {{ servicio.servicio }}

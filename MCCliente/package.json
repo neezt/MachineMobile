@@ -37,6 +37,7 @@
     "call-number": "^1.0.1",
     "com-sarriaroman-photoviewer": "^1.1.18",
     "cordova-android": "^8.1.0",
+    "cordova-ios": "^5.0.1",
     "cordova-plugin-advanced-http": "^2.2.0",
     "cordova-plugin-fcm-with-dependecy-updated": "^4.0.0",
     "cordova-plugin-file": "^6.0.2",
