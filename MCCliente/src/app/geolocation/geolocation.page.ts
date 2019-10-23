@@ -79,11 +79,16 @@ export class GeolocationPage implements OnInit,AfterViewInit {
                 tipo : '',
                 position: null,
                 notas: null,
-                cliente: null
+                cliente: null,
+                evaluacion: null
             };
   gmarkers = [];
   notas= [];
   numStatus=1;
+  public progress: number = 0;
+
+    // Interval function
+    protected interval: any;
   @ViewChild('mapElement', {static: true}) mapNativeElement: ElementRef;
   constructor(
     public alertController: AlertController,
@@ -239,12 +244,13 @@ async presentAlert() {
       } else{
           this.indexLast=servicio;
           this.classHtml="map50";
+          this.hasNotes=true;
           if(this.servicios[servicio].notas){
               this.notas=this.servicios[servicio].notas;
           } else{
             this.classHtml="map80";
             this.notas=[];
-            this.hasNotes=true;  
+              
           }
           if(this.servicios[servicio].status==="Aceptado"){
             this.numStatus=1;
@@ -370,5 +376,26 @@ async presentAlert() {
 
     showImage(image){
         this.photoViewer.show(this.notas[image].foto);
+    }
+
+    onPress($event) {
+        console.log("onPress", $event);
+        this.startInterval();
+    }
+
+    onPressUp($event) {
+        console.log("onPressUp", $event);
+        this.stopInterval();
+    }
+
+    startInterval() {
+        const self = this;
+        this.interval = setInterval(function () {
+            self.progress = self.progress + 1;
+        }, 50);
+    }
+
+    stopInterval() {
+        clearInterval(this.interval);
     }
 }

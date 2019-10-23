@@ -30,39 +30,57 @@
   <div *ngIf="alive">
     <ion-item>
       <ion-label position="floating">Servicio:</ion-label>
-      <ion-input [(ngModel)]="filter.servicio"></ion-input>
+      <ion-input 
+        type="number"
+        [(ngModel)]="filter.servicio"></ion-input>
     </ion-item>
     <ion-item>
       <ion-label position="floating">Desde:</ion-label>
-      <ion-datetime></ion-datetime>
+      <ion-datetime 
+        displayFormat="DD/MM/YYYY"
+        #desde
+        (ionChange)="changeDate(desde.value)"
+      ></ion-datetime>
     </ion-item>
     <ion-item>
       <ion-label position="floating">Hasta:</ion-label>
-      <ion-datetime></ion-datetime>
+      <ion-datetime 
+        displayFormat="DD/MM/YYYY"
+        #hasta
+        (ionChange)="changeDateHasta(hasta.value)"
+        ></ion-datetime>
     </ion-item>
     <ion-item>
       <ion-label position="floating">Estatus:</ion-label>
       <ion-select [(ngModel)]="filter.status">
-        <ion-select-option value="Activo">Activo</ion-select-option>
-        <ion-select-option value="Inactivo">Inactivo</ion-select-option>
+        <ion-select-option value="" selected>Todos</ion-select-option>
+        <ion-select-option value="Aceptado">Aceptado</ion-select-option>
+        <ion-select-option value="Cerrado">Cerrado</ion-select-option>
+        <ion-select-option value="Cancelado">Cancelado</ion-select-option>
+        <ion-select-option value="En Progreso">En Progreso</ion-select-option>
+        <ion-select-option value="Finalizado">Finalizado</ion-select-option>
+        <ion-select-option value="Nuevo">Nuevo</ion-select-option>
+        
       </ion-select>
     </ion-item>
     <ion-item>
       <ion-label>Soporte Técnico:</ion-label>
-      <ion-toggle checked></ion-toggle>
+      <ion-toggle [(ngModel)]="filter.soporte"></ion-toggle>
     </ion-item>
     <ion-item>
       <ion-label>Mtto Preventivo:</ion-label>
-      <ion-toggle checked></ion-toggle>
+      <ion-toggle [(ngModel)]="filter.preventivo"> </ion-toggle>
     </ion-item>
     <ion-item>
       <ion-label>Mtto Correctivo:</ion-label>
-      <ion-toggle checked></ion-toggle>
+      <ion-toggle [(ngModel)]="filter.correctivo"></ion-toggle>
     </ion-item>
     <ion-grid>
       <ion-row>
         <ion-col offset="4">
-          <ion-button color="primary" size="small">
+          <ion-button color="primary"
+            (click)="searchFilter()"
+           size="small">
             <ion-icon name="search"></ion-icon>
             Buscar
           </ion-button>
@@ -72,10 +90,11 @@
   </div>
   <ion-item>
     <ion-label position="floating">Ordenar Por:</ion-label>
-    <ion-select>
-      <ion-select-option value="Fecha" selected>Fecha</ion-select-option>
-      <ion-select-option value="Estatus">Estatus</ion-select-option>
-      <ion-select-option value="Ticket">Ticket</ion-select-option>
+    <ion-select 
+      (ionChange)="searchFilter()"
+      [(ngModel)]="filter.orderBy">
+      <ion-select-option value="fechaServicio" selected>Fecha</ion-select-option>
+      <ion-select-option value="status">Estatus</ion-select-option>
     </ion-select>
   </ion-item>
 </ion-header>
@@ -90,15 +109,15 @@
     </ion-item>
     <ion-card-content>
       <ion-row>
-        <ion-col>Estatus: {{ servicio.status }}</ion-col>
-        <ion-col>Equipo: {{ servicio.equipo }}</ion-col>
+        <ion-col *ngIf="servicio.status">Estatus: {{ servicio.status }}</ion-col>
+        <ion-col *ngIf="servicio.equipo">Equipo: {{ servicio.equipo }}</ion-col>
       </ion-row>
       <ion-row>
-        <ion-col>
+        <ion-col *ngIf="servicio.especialista">
           Especialista: {{servicio.especialista.name}}
         </ion-col>
       </ion-row>
-      <ion-row>
+      <ion-row *ngIf="servicio.fechaServicio">
         <ion-col >Fecha: {{ servicio.fechaServicio.toDate() | date:'dd-MM-yyyy HH:mm:ss' }}</ion-col>
       </ion-row>
     </ion-card-content>

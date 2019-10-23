@@ -39,7 +39,8 @@ export class ServicioPage implements OnInit,OnDestroy {
                 tipo : '',
                 position: null,
                 notas: null,
-                cliente: null
+                cliente: null,
+                evaluacion: null
             };
   showCancel = false;
   showLoad= false;

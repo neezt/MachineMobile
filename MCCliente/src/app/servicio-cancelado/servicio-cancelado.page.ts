@@ -37,7 +37,8 @@ export class ServicioCanceladoPage implements OnInit,OnDestroy {
                 tipo : '',
                 position: null,
                 notas: null,
-                cliente: null
+                cliente: null,
+                evaluacion: null
             };
   especialista: EspecialistaI= {
                             id:'',

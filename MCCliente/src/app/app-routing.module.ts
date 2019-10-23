@@ -12,7 +12,9 @@ const routes: Routes = [
   { path: 'especialista-sitio', loadChildren: './especialista-sitio/especialista-sitio.module#EspecialistaSitioPageModule' },
   { path: 'servicio-cancelado', loadChildren: './servicio-cancelado/servicio-cancelado.module#ServicioCanceladoPageModule' },
   { path: 'servicio-rechazado', loadChildren: './servicio-rechazado/servicio-rechazado.module#ServicioRechazadoPageModule' },
-  { path: 'reporte-progreso', loadChildren: './reporte-progreso/reporte-progreso.module#ReporteProgresoPageModule' },
+  { path: 'reporte-progreso', loadChildren: './reporte-progreso/reporte-progreso.module#ReporteProgresoPageModule' },  { path: 'evalua-servicio', loadChildren: './evalua-servicio/evalua-servicio.module#EvaluaServicioPageModule' },
+  { path: 'servicio-terminado', loadChildren: './servicio-terminado/servicio-terminado.module#ServicioTerminadoPageModule' },
+
 ];
 
 

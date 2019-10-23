@@ -1,5 +1,5 @@
 import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
+import { BrowserModule, HAMMER_GESTURE_CONFIG } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
@@ -20,6 +20,7 @@ import { AuthenticateService } from './service/authentication.service';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { PhotoViewer } from '@ionic-native/photo-viewer/ngx';
+import {IonicGestureConfig} from './gestures/ionic-gesture-config';
 
 import * as firebase from 'firebase';
 firebase.initializeApp(environment.firebaseConfig);

@@ -21,4 +21,5 @@ export interface ServicioI {
     position: any;
     notas: any;
     cliente: any;
+    evaluacion: any;
 }

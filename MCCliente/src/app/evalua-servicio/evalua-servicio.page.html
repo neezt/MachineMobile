@@ -1,0 +1,113 @@
+<ion-header translucent>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="1">
+        <a (click)="goToBack()">
+          <ion-icon
+            style="margin-top:10px;"
+            name="arrow-dropleft-circle"
+            size="large"
+            color="primary"
+          ></ion-icon>
+        </a>
+      </ion-col>
+      <ion-col>
+        <img src="/assets/icon/logo.png" style="padding-left:10px;" />
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-header>
+
+<ion-content>
+
+  <div class="ion-text-center" style="font-weight:bold; font-size:25px;"> 
+          Servicio<br/>
+          #{{servicio.servicio}}<br/>
+        </div>
+        <div class="ion-text-center"> 
+            Evaluación de Servicio
+        </div>
+  <ion-item>
+          <ion-label>Puntualidad</ion-label>
+  </ion-item>
+  <ion-item>
+          <rating [(ngModel)]="servicio.evaluacion.puntualidad"
+              readonly="false"
+              size="default">
+              </rating>
+   </ion-item>
+   <ion-text padding 
+      style="font-size:19px; ">
+    Calidad de Servicio
+  </ion-text>
+  <ion-item>
+    <ion-label>Dominio Técnico</ion-label>
+  </ion-item>
+  <ion-item>
+          
+          <rating [(ngModel)]="servicio.evaluacion.dominio"
+              readonly="false"
+              size="default">
+              </rating>
+   </ion-item>
+   <ion-item>
+          <ion-label>Seguimiento de Proceso</ion-label>
+   </ion-item>          
+   <ion-item>
+          <rating [(ngModel)]="servicio.evaluacion.proceso"
+              readonly="false"
+              size="default">
+              </rating>
+   </ion-item>
+   <ion-item>
+          <ion-label>Orden y Limpieza</ion-label>
+   </ion-item>          
+   <ion-item>
+          <rating [(ngModel)]="servicio.evaluacion.orden"
+              readonly="false"
+              size="default">
+              </rating>
+   </ion-item>
+   <ion-text padding 
+      style="font-size:19px; ">
+      Atención al Cliente
+  </ion-text>
+  <ion-item>
+          <ion-label>Empatia</ion-label>
+   </ion-item>          
+   <ion-item>
+          <rating [(ngModel)]="servicio.evaluacion.empatia"
+              readonly="false"
+              size="default">
+              </rating>
+   </ion-item>
+   <ion-item>
+          <ion-label>Rapidez</ion-label>
+   </ion-item>          
+   <ion-item>
+          <rating [(ngModel)]="servicio.evaluacion.rapidez"
+              readonly="false"
+              size="default">
+              </rating>
+   </ion-item>
+   <ion-item>
+          <ion-label>Comunicación</ion-label>
+   </ion-item>          
+   <ion-item>
+          <rating [(ngModel)]="servicio.evaluacion.comunicacion"
+              readonly="false"
+              size="default">
+              </rating>
+   </ion-item>
+
+    <ion-grid>
+          <ion-row>
+            <ion-col offset="3">
+              <ion-button color="primary" size="small" (click)="updateServicio()">
+                Enviar Evaluación
+              </ion-button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+</ion-content>

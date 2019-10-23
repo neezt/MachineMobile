@@ -12,15 +12,18 @@
   </ion-fab>
   
   <ion-grid>
-    <ion-row>
-      <ion-col offset="3">
+    <ion-row 
+        justify-content-center 
+        align-items-center style="height: 100%">
         <ion-fab 
             vertical="top" >
-          <ion-fab-button class="fabMap" (click)="presentAlert()" color="light">
+          <ion-fab-button class="fabMap" 
+          (press)="onPress($event)" (pressup)="onPressUp($event)"
+           color="light">
             <img src="/assets/images/boton.png">
           </ion-fab-button>
         </ion-fab>
-      </ion-col>
+      
     </ion-row>
   </ion-grid>
   
@@ -43,7 +46,7 @@
       </ion-col>
     </ion-row>
     <ion-row *ngIf="hasNotes">
-      <ol class="progress progress">
+      <ol class="progress">
         <li class="is-nuevo" data-step="1">
           Nuevo
         </li>
@@ -60,17 +63,10 @@
           Finalizado
         </li>
         <li data-step="6" [ngClass]="numStatus >= 5 ? 'is-aceptado':'progress__last'">
-          Terminado
+          Cerrado
         </li>
       </ol>
-      <ion-segment scrollable>
-          <ion-segment-button >
-              <ion-label 
-                style="padding-left:20px;padding-right:20px; font-weight:bold;">
-                  Nuevo
-              </ion-label>
-          </ion-segment-button>
-        </ion-segment>
+      
     </ion-row>
     <ion-row *ngIf="notas.length > 0">
       <div style="overflow: scroll !important; height:320px;">
